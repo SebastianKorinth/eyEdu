@@ -112,7 +112,7 @@ server <- function(input, output) {
       values$aoi.table$image.name <- input$image.list
       file.name.var <- gsub(".png", ".txt",input$image.list)
       write.table(values$aoi.table,
-                  file = paste("aoiFiles/", file.name.var, sep = ""),
+                  file = paste(raw.data.path, "aoiFiles/", file.name.var, sep = ""),
                   quote = F,
                   row.names = F)
       values$aoi.table <- data.frame(x.left = numeric(),
