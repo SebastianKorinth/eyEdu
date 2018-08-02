@@ -17,7 +17,7 @@ server <- function(input, output) {
   
     output$plot.image <- renderPlot({ 
     
-    background.image <- readPNG(paste("images/", input$image.list, sep = ""))
+    background.image <- readPNG(paste(raw.data.path,"images/", input$image.list, sep = ""))
     plot(0:1,0:1, type='n',axes = F, ann=FALSE)
     rasterImage(background.image, 0, 0, 1, 1)
     rect(xleft = 0, xright = 1, ytop = 1, ybottom = 0, 
@@ -128,11 +128,6 @@ server <- function(input, output) {
    values$aoi.table <- values$aoi.table[0,]
 
   })
-  
-###############################################################################    
-# ends the app upon botton press  
-  observeEvent(input$ending, {
-    stopApp()
-  })
+    
 
 }
