@@ -2,20 +2,40 @@
 EyEduDefineWordAois <- function(raw.data.path,
                                line.margin = 26,
                                character.space.width = 10,
-                               inter.word.adjust = 5){
+                               inter.word.adjust = 5,
+                               frugal = T){
 
 load("eyEdu_data.Rda")
 
 # Defines a path from where to take stimuli images
-inpath = paste(raw.data.path, "/images/", sep = "")
+inpath = paste(raw.data.path, "images/", sep = "")
 
 # Defines the list of files to work on 
 file.names <- list.files(path= inpath)
 
-# Initiates a list to be filled with aoi.info
-eyEdu.data$aoi.info <- list()
-length(eyEdu.data$aoi.info) = length(file.names)
-names(eyEdu.data$aoi.info) = file.names
+# Reduces the file list in order to avoid redundent aoi definitions
+if (frugal == T) {
+  
+  eyEdu.data$aoi.info <- list()
+  temp.file.names <- gsub(".*_", "", file.names)
+  file.names <- file.names[duplicated(temp.file.names) == F] 
+  length(eyEdu.data$aoi.info) = length(file.names)
+  names(eyEdu.data$aoi.info) = file.names
+
+  
+
+  
+  
+}else{
+  
+  # Initiates the full list (for all image files) to be filled with aoi.info
+  eyEdu.data$aoi.info <- list()
+  length(eyEdu.data$aoi.info) = length(file.names)
+  names(eyEdu.data$aoi.info) = file.names
+  
+}
+
+
 
 # Loops through image files  
 for(file.counter in 1 : length(file.names)){

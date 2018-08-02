@@ -22,6 +22,9 @@ aoi.set.name <- eyEdu.data$participants[[participant.counter]]$
  trial.info$background.image[trial.counter]
 aoi.info.set <- eyEdu.data$aoi.info[[aoi.set.name]]
 
+if (is.null(aoi.info.set)) {
+  next
+}
 # loops through aois  
 for(aoi.counter in 1: nrow(aoi.info.set)) {
     

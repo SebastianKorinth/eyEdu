@@ -15,6 +15,11 @@ if (!require("EBImage")) {
     library(png)
   }
   
+  if (!require("shiny")) {
+    install.packages("shiny", dependencies = TRUE)
+    library(shiny)
+  }
+  
   if (!require("ggplot2")) {
     install.packages("ggplot2", dependencies = TRUE)
     library(ggplot2)
