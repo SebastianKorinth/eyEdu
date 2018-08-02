@@ -19,7 +19,7 @@ else {
 
 
 for(aoi.file.counter in 1: length(aoi.file.list)) {
-temp.df <- read.table(file = paste("aoiFiles/", 
+temp.df <- read.table(file = paste(raw.data.path, "aoiFiles/", 
                                    aoi.file.list[aoi.file.counter], 
                                    sep = ""), 
                       header = T, sep = " ", stringsAsFactors = F)
