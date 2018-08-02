@@ -2,7 +2,7 @@
 EyEduImportAoIs <- function(append.aois = T){
 
 # list of aoi.files
-aoi.file.list <- list.files(path= "aoiFiles/", pattern = "\\.txt$")
+aoi.file.list <- list.files(path= paste(raw.data.path, "aoiFiles/", sep = ""), pattern = "\\.txt$")
   
 # loads the eyEdu data frame to which the aoi.files will be added
 load("eyEdu_data.Rda")
