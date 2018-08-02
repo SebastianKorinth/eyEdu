@@ -8,7 +8,7 @@ shinyUI(fluidPage(
   sidebarPanel(
       
       selectInput("image.list", "Choose an image:", 
-                  choices = list.files(paste(image.path,"images/", sep = ""))),    
+                  choices = list.files(paste(raw.data.path,"images/", sep = ""))),    
       actionButton("save.aoi.file", "Save AoI file"),
       actionButton("reset.aoi.file", "Reset"),
       tableOutput("aoi.table"),
