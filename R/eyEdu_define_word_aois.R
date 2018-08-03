@@ -1,11 +1,10 @@
 
-EyEduDefineWordAois <- function(raw.data.path,
-                               line.margin = 26,
+EyEduDefineWordAois <- function(line.margin = 26,
                                character.space.width = 10,
                                inter.word.adjust = 5,
                                frugal = T){
 
-load("eyEdu_data.Rda")
+load(paste(raw.data.path, "eyEdu_data.Rda", sep = ""))
 
 # Defines a path from where to take stimuli images
 inpath = paste(raw.data.path, "images/", sep = "")
@@ -183,7 +182,7 @@ processed.file <- file.names[file.counter]
 print(paste("Segmenting image:", processed.file, "- number:", 
             file.counter, "out of", length(file.names), sep = " "))
 } 
-save(eyEdu.data, file = "eyEdu_data.Rda" ) 
+save(eyEdu.data, file = paste(raw.data.path, "eyEdu_data.Rda", sep = "") ) 
 print("Done!")   
 
 }

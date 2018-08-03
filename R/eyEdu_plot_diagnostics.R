@@ -2,7 +2,7 @@ EyEduPlotDiagnostics <- function(participant.nr,
                                 trial.nr, 
                                 sample.length = 2000){
 
-load(file = "eyEdu_data.Rda")  
+load(file = paste(raw.data.path, "eyEdu_data.Rda", sep = ""))  
 
 # Extracts sample data for participant.nr and trial.nr
 plot.sample.posx <- eyEdu.data$participants[[

@@ -33,7 +33,7 @@ save(fixation.summary, file = "fixation_summary.Rda")
 
 EyEduGetFixationSummary  <- function(){
 
-load("eyEdu_data.Rda")
+load(paste(raw.data.path, "eyEdu_data.Rda", sep = ""))
 
 fixation.summary <- data.frame(fix.start = numeric(),
                                fix.end = numeric(),
@@ -57,7 +57,7 @@ for (participant.counter in 1:length(eyEdu.data$participants)) {
   
 }
 
-save(fixation.summary, file = "fixation_summary.Rda")
+save(fixation.summary, file = paste(raw.data.path, "fixation_summary.Rda", sep = ""))
 
 }
 

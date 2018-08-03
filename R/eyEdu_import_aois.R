@@ -5,7 +5,7 @@ EyEduImportAoIs <- function(append.aois = T){
 aoi.file.list <- list.files(path= paste(raw.data.path, "aoiFiles/", sep = ""), pattern = "\\.txt$")
   
 # loads the eyEdu data frame to which the aoi.files will be added
-load("eyEdu_data.Rda")
+load(paste(raw.data.path, "eyEdu_data.Rda", sep = ""))
 
 
 present.aoi.length <- length(eyEdu.data[["aoi.info"]])
@@ -31,7 +31,7 @@ names(eyEdu.data[["aoi.info"]])[[aoi.file.counter + start.index]] <- gsub(".txt"
 
 rm(temp.df)
 
-save(eyEdu.data, file = "eyEdu_data.Rda")
+save(eyEdu.data, file = paste(raw.data.path, "eyEdu_data.Rda", sep = ""))
 
 }
 }

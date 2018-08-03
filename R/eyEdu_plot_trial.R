@@ -8,7 +8,7 @@ EyEduPlotTrial <- function(participant.nr,
                           sample.color = "darkviolet",
                           sample.type = "raw")
 {
-load(file = "eyEdu_data.Rda") 
+load(file = paste(raw.data.path, "eyEdu_data.Rda", sep = "")) 
   
 # Extracts relevant samples
 trial.samples <- subset(eyEdu.data$participants[[participant.nr]]$sample.data, 

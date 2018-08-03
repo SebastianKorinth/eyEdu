@@ -1,8 +1,7 @@
-EyEduDetectFixationsIDT <- function(raw.data.path, 
-                                   dispersion.var = 70, 
+EyEduDetectFixationsIDT <- function(dispersion.var = 70, 
                                    duration.var = 7){
 
-load(file = "eyEdu_data.Rda")  
+load(file = paste(raw.data.path, "eyEdu_data.Rda", sep = ""))  
 
 for(participant.counter in 1:length(eyEdu.data$participants)){
   
@@ -65,7 +64,7 @@ print(paste("Fixation detection for:",
             max(length(eyEdu.data$participants)), sep = " "))
 }
 
-save(eyEdu.data, file = "eyEdu_data.Rda")
+save(eyEdu.data, file = paste(raw.data.path, "eyEdu_data.Rda", sep = ""))
 
 return("Done!")
 }

@@ -1,5 +1,4 @@
-EyEduImportRawData <- function(raw.data.path, 
-                              poi.start = "start_trial", 
+EyEduImportRawData <- function(poi.start = "start_trial", 
                               poi.end = "stop_trial"){
 
   
@@ -173,6 +172,6 @@ print(paste("Importing file:", processed.file, "- number",
             length(eyEdu.data$participants), sep = " "))
 }
 
-save(eyEdu.data, file = "eyEdu_data.Rda")
+save(eyEdu.data, file = paste(raw.data.path,"eyEdu_data.Rda", sep = ""))
 return("Done!")
 }

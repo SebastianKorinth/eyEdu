@@ -1,6 +1,6 @@
 EyEduCollateFixationsAois <- function(){
 
-load("eyEdu_data.Rda")
+load(paste(raw.data.path, "eyEdu_data.Rda", sep = ""))
 
 # loops through participants  
 for(participant.counter in 1:length(eyEdu.data$participants)){
@@ -49,7 +49,7 @@ eyEdu.data$participants[[participant.counter]]$
 } # end trial.counter
 } # end participant.counter
   
-save(eyEdu.data, file = "eyEdu_data.Rda")
+save(eyEdu.data, file = paste(raw.data.path, "eyEdu_data.Rda", sep = ""))
   
 }
   
