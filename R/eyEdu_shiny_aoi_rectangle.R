@@ -7,5 +7,5 @@ EyEduShinyAoiRectangle  <- function() {
     stop("Could not find example directory. Try re-installing eyEdu.", call. = FALSE)
   }
   
-  shiny::runApp(appDir, display.mode = "normal")
+  shiny::runApp(appDir, display.mode = "normal", launch.browser = T)
 }
