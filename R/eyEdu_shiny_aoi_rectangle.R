@@ -1,7 +1,7 @@
 # function to call the shiny app for free hand aoi definition
 
 
-EyEduShinyAoiRectangle  <- function() {
+EyEduShinyAoiRectangle  <- function(scale.var = 0.65) {
   appDir <- system.file("shiny-examples", "eyEduShinyAoiRectangle", package = "eyEdu")
   if (appDir == "") {
     stop("Could not find example directory. Try re-installing eyEdu.", call. = FALSE)
