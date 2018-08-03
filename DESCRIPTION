@@ -1,11 +1,13 @@
 Package: eyEdu
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Basic Eye Movement Analysis Tool for Educational Purposes  
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Author: Sebastian Korinth & Dejan Draschkow
+Maintainer: Sebastian Korinth <korinth@korinth.org>
+Description: The package provides basic functions to import raw eye-
+    tracking data recorded with low-cost eye-tracking equipment (EyeTribe),
+    to visualize data, to conduct fixation detection, to create or import
+    area of interest definitions.
+License: GPL-3 Beerware
 Encoding: UTF-8
 LazyData: true
