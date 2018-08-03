@@ -1,1 +1,9 @@
 exportPattern("^[[:alpha:]]+")
+import(png)
+import(shiny)
+import(ggplot2)
+import(EBImage)
+import(grid)   
+import(emov)
+import(reshape2)
+    
