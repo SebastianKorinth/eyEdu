@@ -31,6 +31,7 @@ shinyUI(fluidPage(
                                  clip = TRUE, 
                                  direction = c("xy", "x", "y"), 
                                  resetOnNew = TRUE)),
+    actionButton("ending","Done"),
     
     width = 8
   )

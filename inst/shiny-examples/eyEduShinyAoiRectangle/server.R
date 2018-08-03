@@ -128,6 +128,12 @@ server <- function(input, output) {
    values$aoi.table <- values$aoi.table[0,]
 
   })
+
+###############################################################################    
+# ends the app upon botton press  
+  observeEvent(input$ending, {
+    stopApp()
+  })
     
 
 }
