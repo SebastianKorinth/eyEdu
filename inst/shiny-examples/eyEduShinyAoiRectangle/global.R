@@ -1,4 +1,6 @@
 
+library(png)
+
 # reads the first image from the folder, which is used to set plot dimensions
 # for all images + also needed to calculate pixel-click-location
 one.image = list.files(paste(raw.data.path, "images/", sep = ""))[1]
