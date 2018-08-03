@@ -7,7 +7,7 @@ for(participant.counter in 1:length(eyEdu.data$participants)){
   
 eyEdu.data$participants[[participant.counter]]$fixation.data$aoi.index <- NA
 eyEdu.data$participants[[participant.counter]]$fixation.data$aoi.line.index <- NA
-
+eyEdu.data$participants[[participant.counter]]$fixation.data$aoi.label <- NA
 # loops through trials 
 for(trial.counter in 1:max(eyEdu.data$participants[[participant.counter]]$
                            fixation.data$trial.index)){
@@ -35,6 +35,7 @@ write.index <-which(trial.subset$fix.pos.x > aoi.info.set$x.left[aoi.counter] &
       
 trial.subset$aoi.index[write.index] <- aoi.info.set$aoi.index[aoi.counter] 
 trial.subset$aoi.line.index[write.index] <- aoi.info.set$line.number[aoi.counter]
+trial.subset$aoi.label[write.index] <- aoi.info.set$aoi.label[aoi.counter]
 
 }  # end aoi.counter
 eyEdu.data$participants[[participant.counter]]$
@@ -44,6 +45,10 @@ eyEdu.data$participants[[participant.counter]]$
 eyEdu.data$participants[[participant.counter]]$
   fixation.data$aoi.line.index[eyEdu.data$participants[[participant.counter]]$
    fixation.data$trial.index == trial.counter] <- trial.subset$aoi.line.index
+
+eyEdu.data$participants[[participant.counter]]$
+  fixation.data$aoi.label[eyEdu.data$participants[[participant.counter]]$
+     fixation.data$trial.index == trial.counter] <- trial.subset$aoi.label
 
 
 } # end trial.counter

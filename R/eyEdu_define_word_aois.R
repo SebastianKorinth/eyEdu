@@ -173,6 +173,9 @@ aoi.info <- rbind(aoi.info, line.aoi)
 
 # Adds an aoi.index for complete text (relevant for multi-line texts only)
 aoi.info$aoi.index <- 1: nrow(aoi.info)
+
+# Adds an (empty) column for aoi labels
+aoi.info$aoi.label <- NA
   
 # Saves aoi.info into the eyEdu.data list 
 eyEdu.data$aoi.info[[file.counter]] <- aoi.info
