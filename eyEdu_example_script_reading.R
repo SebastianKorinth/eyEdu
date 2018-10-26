@@ -17,7 +17,11 @@ EyEduCheckPackages()
 # The function EyEduGetExamples() wil download a zip-file from github 
 # containing example data files - and the openSesame-experiments used to
 # collect these data. The file will be unzipped and saved in the current
-# working directory. 
+# working directory. Currently there are two options for "example.type"
+# As the name suggests "reading" downloads example data from a single
+# line sentence reading experiment and the OpenSesame experiment itself too.
+# The option "search" downloads a visual object search experiment with 
+# example data. 
 EyEduGetExamples(experiment.type = "reading")
 
 
