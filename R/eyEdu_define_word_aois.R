@@ -2,7 +2,7 @@
 EyEduDefineWordAois <- function(line.margin = 26,
                                character.space.width = 10,
                                inter.word.adjust = 5,
-                               frugal = T){
+                               sparse = T){
 
 load(paste(raw.data.path, "eyEdu_data.Rda", sep = ""))
 
@@ -13,7 +13,7 @@ inpath = paste(raw.data.path, "images/", sep = "")
 file.names <- list.files(path= inpath)
 
 # Reduces the file list in order to avoid redundent aoi definitions
-if (frugal == T) {
+if (sparse == T) {
   
   eyEdu.data$aoi.info <- list()
   temp.file.names <- gsub(".*_", "", file.names)

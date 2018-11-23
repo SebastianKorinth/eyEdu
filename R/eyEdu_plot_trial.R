@@ -1,6 +1,7 @@
 
-EyEduPlotTrial <- function(participant.nr, 
+EyEduPlotTrial <- function(participant.nr = NA, 
                           trial.nr,
+                          participant.name = NA,
                           aoi.color = "black",
                           fix.color = "red",
                           sample.color.r = NA,
@@ -9,17 +10,41 @@ EyEduPlotTrial <- function(participant.nr,
                           sample.type = "raw")
 {
 load(file = paste(raw.data.path, "eyEdu_data.Rda", sep = "")) 
+
   
+# creates a participant dictionary 
+participant.dictionary <- data.frame(matrix(NA, nrow = length(names(eyEdu.data$participants)), ncol = 3))
+colnames(participant.dictionary) <- c("list.entry", "part.name", "part.nr")
+  
+for(list.entry.number  in 1 :length(names(eyEdu.data$participants))) {
+  participant.dictionary$list.entry[list.entry.number] <- list.entry.number
+  participant.dictionary$part.name[list.entry.number] <-  eyEdu.data$participants[[list.entry.number]]$header.info$participant.name
+  participant.dictionary$part.nr[list.entry.number] <-  eyEdu.data$participants[[list.entry.number]]$header.info$participant.nr
+}
+
+if (is.na(participant.name)) {
+ # use participant number
+  list.entry.nr <- which(participant.dictionary$part.nr == participant.nr)  
+  
+}else {
+  # use participant name; participant number will be ignored
+  list.entry.nr <- which(participant.dictionary$part.name == participant.name)
+}
+
+
+
+  
+    
 # Extracts relevant samples
-trial.samples <- subset(eyEdu.data$participants[[participant.nr]]$sample.data, 
+trial.samples <- subset(eyEdu.data$participants[[list.entry.nr]]$sample.data,
                           eyEdu.data$participants[[
-                            participant.nr]]$sample.data$trial.index == trial.nr) 
+                            list.entry.nr]]$sample.data$trial.index == trial.nr)
 
 
 # Extractes relevant fixations; if fixation detection was conducted, if not,
 # a dummy data frame will be created
 
-if (is.null(eyEdu.data$participants[[participant.nr]]$fixation.data)) {
+if (is.null(eyEdu.data$participants[[list.entry.nr]]$fixation.data)) {
   trial.fixations <- data.frame(fix.start = 0,
                                 fix.end = 0,
                                 fix.duration = 0,
@@ -31,15 +56,15 @@ if (is.null(eyEdu.data$participants[[participant.nr]]$fixation.data)) {
                             
 
 } else {
-  trial.fixations <- subset(eyEdu.data$participants[[participant.nr]]$fixation.data,
+  trial.fixations <- subset(eyEdu.data$participants[[list.entry.nr]]$fixation.data,
                             eyEdu.data$participants[[
-                              participant.nr]]$fixation.data$trial.index == trial.nr)
+                              list.entry.nr]]$fixation.data$trial.index == trial.nr)
 
 }
 
 # Stimulus.id belonging to trial.nr
 stimulus.id <- as.numeric(eyEdu.data$participants[[
-participant.nr]]$trial.info$stimulus.id[trial.nr])
+list.entry.nr]]$trial.info$stimulus.id[trial.nr])
   
 # Index of aoi.info corresponding to stimulus id, since any given stimulus.id
 # most likely appears several times (e.g., different combinations of tria and
@@ -61,7 +86,7 @@ if (is.null(eyEdu.data$aoi.info)) {
 } else {
   
   # Generates name for relevant aoi file
-  aoi.index <- grep(paste("*_", stimulus.id, sep =""),names(eyEdu.data$aoi.info))[1]
+  aoi.index <- grep(paste("*_", stimulus.id,".png", sep =""),names(eyEdu.data$aoi.info))[1]
   # Extracts relevant aoi.info
   trial.aoi <- eyEdu.data$aoi.info[[aoi.index]]
   
@@ -82,7 +107,7 @@ if (is.null(eyEdu.data$aoi.info)) {
 image.list <- list.files(paste(raw.data.path, "images/", sep = ""))
 # image.index <- grep(paste("*_", stimulus.id, sep =""),names(eyEdu.data$aoi.info))[1]
 # background.image.file  <- paste(raw.data.path, "images/",image.list[image.index], sep = "")
-image.index <- eyEdu.data$participants[[participant.nr]]$trial.info$background.image[trial.nr]
+image.index <- eyEdu.data$participants[[list.entry.nr]]$trial.info$background.image[trial.nr]
 background.image.file  <- paste(raw.data.path, "images/",image.index, sep = "")
 
   
@@ -93,7 +118,7 @@ page.height <- dim(background)[1]
 background <- rasterGrob(background, interpolate = T)
 
 # Error warning if experiment dimension (Open Sesame) differs from screenshot dims
-if(page.height != eyEdu.data$participant[[participant.nr]]$header.info$display.y[1]) {
+if(page.height != eyEdu.data$participant[[list.entry.nr]]$header.info$display.y[1]) {
   print("Screen dimensions of from experiment info and screenshots do not match.
         Screenshot dims will be used")
 }
@@ -123,7 +148,7 @@ trial.plot <- ggplot(trial.samples) +
  coord_fixed(ratio = 1) +  
  labs(x = NULL, y = NULL) + 
  theme(legend.position = "none", plot.margin = unit(c(0, 0, 0, 0), "in")) +
- ggtitle(paste(eyEdu.data$participants[[participant.nr]]$header.info$participant.name,
+ ggtitle(paste(eyEdu.data$participants[[list.entry.nr]]$header.info$participant.name,
                "/ trial:", trial.nr, "/ stimulus:",stimulus.id, sep = " ")) + 
  theme(plot.title = element_text(hjust = 0.5)) 
 
@@ -149,7 +174,7 @@ trial.plot <- ggplot(trial.samples) +
  coord_fixed(ratio = 1) +  
  labs(x = NULL, y = NULL) + 
  theme(legend.position = "none", plot.margin = unit(c(0, 0, 0, 0), "in")) +
- ggtitle(paste(eyEdu.data$participants[[participant.nr]]$header.info$participant.name,
+ ggtitle(paste(eyEdu.data$participants[[list.entry.nr]]$header.info$participant.name,
                "trial:", trial.nr, "stimulus:",stimulus.id, sep = " / ")) + 
  theme(plot.title = element_text(hjust = 0.5)) 
 }

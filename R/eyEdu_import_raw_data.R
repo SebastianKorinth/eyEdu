@@ -114,7 +114,11 @@ trial.info$stimulus.id <- message.data$message.3[as.numeric(which(
   message.data$message.2 == "stim_id"))]
 trial.info$trial.index <- 1:nrow(trial.info)
 trial.info$trial.duration <- trial.info$stop.message - trial.info$start.message
-trial.info$background.image <- paste(trial.info$trial.index -1,
+# needs some revision (order of header, trial.info etc)
+patch.participant.nr <- as.numeric((message.data$message.3[which(
+  message.data$message.2 == "subject_nr")])[1])
+
+trial.info$background.image <- paste(patch.participant.nr, "_", trial.info$trial.index - 1,
                                      "_", trial.info$stimulus.id,
                                      ".png", sep = "")
 

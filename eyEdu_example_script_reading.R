@@ -7,27 +7,27 @@ library(eyEdu)
 
 
 # ########################################################################
-# EyEdu relies on several libraries. The EyEduCheckPackages() function checks 
-# whether all necessary libraries are available - if not - they will be installed 
+# EyEdu relies on several libraries. The EyEduCheckPackages() function checks
+# whether all necessary libraries are available - if not - they will be installed
 # and all necessary libraries will be loaded. Run only once!
 EyEduCheckPackages()
 
 
 #######################################################################
-# The function EyEduGetExamples() wil download a zip-file from github 
+# The function EyEduGetExamples() wil download a zip-file from github
 # containing example data files - and the openSesame-experiments used to
 # collect these data. The file will be unzipped and saved in the current
 # working directory. Currently there are two options for "example.type"
 # As the name suggests "reading" downloads example data from a single
 # line sentence reading experiment and the OpenSesame experiment itself too.
-# The option "search" downloads a visual object search experiment with 
-# example data. 
+# The option "search" downloads a visual object search experiment with
+# example data.
 EyEduGetExamples(experiment.type = "reading")
 
 
 ########################################################################
-# Some eyEdu functions require the argument raw.data.path, which is the path, 
-# where raw data are stored. If you used the example reading experiment, 
+# Some eyEdu functions require the argument raw.data.path, which is the path,
+# where raw data are stored. If you used the example reading experiment,
 # this will be:
 raw.data.path <- "D:/Dropbox/eyEdu/Test eyEdu/exampleDataReadingExperiment-master/"
 # potential pitfall: Please provide absolut path (relative paths might not work)
@@ -36,20 +36,20 @@ raw.data.path <- "D:/Dropbox/eyEdu/Test eyEdu/exampleDataReadingExperiment-maste
 
 ########################################################################
 # EyEduImportRawData reads raw data (.tsv files), seperates eye movement from
-# message information extracts relevant information (e.g., screen dimensions, 
-# sample rate etc.) and adds this to file called eyEdu_data.Rda. Optional 
-# arguments allow defining time windows within a trial (e.g., poi.end = "...". 
+# message information extracts relevant information (e.g., screen dimensions,
+# sample rate etc.) and adds this to file called eyEdu_data.Rda. Optional
+# arguments allow defining time windows within a trial (e.g., poi.end = "...".
 EyEduImportRawData(poi.end = "response_time_key_finish_reading")
 
 
 ########################################################################
 # Fixation detection: This function uses the emov library by Simon Schwab
-# and its I-DT algorith (Salvucci & Goldberg, 2000), which uses dispersion 
-# limits to distinguish between fixations and saccades. 
+# and its I-DT algorith (Salvucci & Goldberg, 2000), which uses dispersion
+# limits to distinguish between fixations and saccades.
 EyEduDetectFixationsIDT(dispersion.var = 90,duration.var = 6)
 
 ########################################################################
-# EyEduPlotDiagnostics() plots the eye-tracker samples over given length 
+# EyEduPlotDiagnostics() plots the eye-tracker samples over given length
 # (e.g., 2500 ms) overlayed by fixations. This provides a first impression of
 # how well fixation detection worked
 EyEduPlotDiagnostics(participant.nr = 5,trial.nr = 2,sample.length = 2500)
@@ -58,24 +58,29 @@ EyEduPlotDiagnostics(participant.nr = 5,trial.nr = 2,sample.length = 2500)
 # For reading experiments only!
 # The EyEduDefineWordAois() function parses screenshots of reading experiments
 # into areas of interes (aoi)
-EyEduDefineWordAois(line.margin = 27,frugal = T)
+EyEduDefineWordAois(line.margin = 27,sparse = T)
 
 ########################################################################
-# EyEduPlotTrial(). Several arguments allow to show or hide the left, the 
-# right or the average sample position etc. 
-EyEduPlotTrial(participant.nr = 5, trial.nr = 2, 
-               sample.type = "raw", 
-               sample.color.r = NA, 
+# EyEduPlotTrial(). Several arguments allow to show or hide the left, the
+# right or the average sample position etc.
+EyEduPlotTrial(participant.nr = 5, trial.nr = 2,
+               sample.type = "raw",
+               sample.color.r = NA,
                sample.color.l = NA,
                sample.color = "blueviolet")
+# another example that uses participant name instead of number
+EyEduPlotTrial(participant.name = "karl",
+               trial.nr = 7,
+               sample.type = "raw",
+               fix.color = "green" )
 
 ########################################################################
 # EyEduCollateFixationsAois() assignes fixations to areas of interest
 EyEduCollateFixationsAois()
 
 #######################################################################
-# EyEduGetFixationSummary() collects the fixation information of all participants 
-# and summarizes it into one data frame 
+# EyEduGetFixationSummary() collects the fixation information of all participants
+# and summarizes it into one data frame
 EyEduGetFixationSummary()
 
 #######################################################################
@@ -84,6 +89,6 @@ scale.var <- 0.66
 EyEduShinyAoiRectangle()
 
 #######################################################################
-# EyEduGetFixationSummary() collects the fixation information of all participants 
-# and summarizes it into one data frame 
+# EyEduGetFixationSummary() collects the fixation information of all participants
+# and summarizes it into one data frame
 EyEduImportAoIs(append.aois = T)
