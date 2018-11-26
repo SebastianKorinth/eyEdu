@@ -37,6 +37,10 @@ fixation.data.temp = suppressWarnings(  emov.idt(eyEdu.data$participants[[
   duration.var)
 )
 
+if (nrow(fixation.data.temp) == 0) {
+  next
+}
+
 colnames(fixation.data.temp)<- c("fix.start", 
                                  "fix.end", "fix.duration", 
                                  "fix.pos.x", "fix.pos.y")
