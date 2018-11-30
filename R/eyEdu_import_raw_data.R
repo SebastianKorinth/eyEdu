@@ -8,8 +8,8 @@ raw.file.list <- list.files(path= raw.data.path, pattern = "\\.tsv$")
 # Initializes empty list, which will be filled with participant data and
 # an empty list for aoi.info and futur features
 eyEdu.data <- list()  
-length(eyEdu.data) = 2
-names(eyEdu.data) <- c("participants","aoi.info")
+length(eyEdu.data) = 3
+names(eyEdu.data) <- c("participant.table","participants","aoi.info")
 
 # Fills first level list with an empty list of length n-participants
 eyEdu.data$participants <- list()
@@ -114,15 +114,16 @@ trial.info$stimulus.id <- message.data$message.3[as.numeric(which(
   message.data$message.2 == "stim_id"))]
 trial.info$trial.index <- 1:nrow(trial.info)
 trial.info$trial.duration <- trial.info$stop.message - trial.info$start.message
-# needs some revision (order of header, trial.info etc)
-patch.participant.nr <- as.numeric((message.data$message.3[which(
+
+participant.nr <- as.numeric((message.data$message.3[which(
   message.data$message.2 == "subject_nr")])[1])
 
-trial.info$background.image <- paste(patch.participant.nr, "_", trial.info$trial.index - 1,
+trial.info$background.image <- paste(participant.nr, "_", 
+                                     trial.info$trial.index - 1,
                                      "_", trial.info$stimulus.id,
                                      ".png", sep = "")
 
-# Loop (in loop) searches for rownames in eye movement data, wich correspond 
+# Loop searches for rownames in eye movement data, wich correspond 
 # to time points of start and stop messages. Note, timing of eye movement data 
 # (i.e., ~ 17 ms each time point at 60Hz sampling rate) has to be aligned with 
 # stimulus and response timing (1 ms accuracy). The nearest eye movement
@@ -151,8 +152,7 @@ colnames(header.info) <- c("participant.name",
                            "record.date", 
                            "trial.count")
 header.info[1,1] <- gsub(".tsv", "", raw.file.list[file.counter])
-header.info[1,2] <- as.numeric((message.data$message.3[which(
-  message.data$message.2 == "subject_nr")])[1])
+header.info[1,2] <- participant.nr
 header.info[1,3] <- as.numeric(message.data$message.2[which(
   message.data$message.1 == "samplerate:")])
 display.resolution <- message.data$message.3[which(
@@ -175,6 +175,20 @@ print(paste("Importing file:", processed.file, "- number",
             file.counter, "out of",
             length(eyEdu.data$participants), sep = " "))
 }
+
+# creates a participant table and adds it to the eyEdu.data file
+participant.table <- data.frame(matrix(NA, nrow = length(names(
+  eyEdu.data$participants)), ncol = 3))
+colnames(participant.table) <- c("list.entry", "part.name", "part.nr")
+
+for(list.entry.number  in 1 :length(names(eyEdu.data$participants))) {
+  participant.table$list.entry[list.entry.number] <- list.entry.number
+  participant.table$part.name[list.entry.number] <-  eyEdu.data$participants[[
+    list.entry.number]]$header.info$participant.name
+  participant.table$part.nr[list.entry.number] <-  eyEdu.data$participants[[
+    list.entry.number]]$header.info$participant.nr
+}
+eyEdu.data$participant.table <- participant.table
 
 save(eyEdu.data, file = paste(raw.data.path,"eyEdu_data.Rda", sep = ""))
 return("Done!")

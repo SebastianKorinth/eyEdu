@@ -1,7 +1,11 @@
-EyEduCollateFixationsAois <- function(){
+EyEduAssignFixationsAois <- function(sparse.aoi.definition = TRUE){
 
 load(paste(raw.data.path, "eyEdu_data.Rda", sep = ""))
 
+  if (is.null(eyEdu.data$aoi.info)) {
+    return("There are no AoI definitios!")
+    }
+  
 # loops through participants  
 for(participant.counter in 1:length(eyEdu.data$participants)){
   
@@ -20,15 +24,20 @@ trial.subset <- subset(eyEdu.data$participants[[participant.counter]]$
 # chosing the corresponding aoi.info set 
 aoi.set.name <- eyEdu.data$participants[[participant.counter]]$
  trial.info$background.image[trial.counter]
-aoi.info.set <- eyEdu.data$aoi.info[[aoi.set.name]]
 
-if (is.null(aoi.info.set)) {
-  next
+if (sparse.aoi.definition == TRUE) {
+  stim.id.only <- unlist(strsplit(aoi.set.name, "_"))[3]
+  aoi.names <- names(eyEdu.data$aoi.info)
+  aoi.info.set <- eyEdu.data$aoi.info[[aoi.names[grep(stim.id.only, 
+                                                      aoi.names)]]]
+  
+} else {
+aoi.info.set <- eyEdu.data$aoi.info[[aoi.set.name]]
 }
+
 # loops through aois  
 for(aoi.counter in 1: nrow(aoi.info.set)) {
-    
-write.index <-which(trial.subset$fix.pos.x > aoi.info.set$x.left[aoi.counter] &
+ write.index <-which(trial.subset$fix.pos.x > aoi.info.set$x.left[aoi.counter] &
                     trial.subset$fix.pos.x < aoi.info.set$x.right[aoi.counter] &
                     trial.subset$fix.pos.y > aoi.info.set$y.top[aoi.counter] & 
                     trial.subset$fix.pos.y < aoi.info.set$y.bottom[aoi.counter])
@@ -49,8 +58,6 @@ eyEdu.data$participants[[participant.counter]]$
 eyEdu.data$participants[[participant.counter]]$
   fixation.data$aoi.label[eyEdu.data$participants[[participant.counter]]$
      fixation.data$trial.index == trial.counter] <- trial.subset$aoi.label
-
-
 } # end trial.counter
 } # end participant.counter
   

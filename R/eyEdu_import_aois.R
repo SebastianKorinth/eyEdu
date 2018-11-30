@@ -1,8 +1,13 @@
 
 EyEduImportAoIs <- function(append.aois = T){
 
+if (file.exists(paste(raw.data.path, "aoiFiles", sep = "")) == F ){
+ return("Can't find folder containing aoi files!")
+ } 
+  
 # list of aoi.files
-aoi.file.list <- list.files(path= paste(raw.data.path, "aoiFiles/", sep = ""), pattern = "\\.txt$")
+aoi.file.list <- list.files(path= paste(raw.data.path, "aoiFiles/", sep = ""),
+                            pattern = "\\.txt$")
   
 # loads the eyEdu data frame to which the aoi.files will be added
 load(paste(raw.data.path, "eyEdu_data.Rda", sep = ""))
@@ -17,7 +22,6 @@ else {
  start.index <- 1
 }
 
-
 for(aoi.file.counter in 1: length(aoi.file.list)) {
 temp.df <- read.table(file = paste(raw.data.path, "aoiFiles/", 
                                    aoi.file.list[aoi.file.counter], 
@@ -25,9 +29,10 @@ temp.df <- read.table(file = paste(raw.data.path, "aoiFiles/",
                       header = T, sep = " ", stringsAsFactors = F)
 
 eyEdu.data[["aoi.info"]][[aoi.file.counter + start.index]] <- temp.df
-names(eyEdu.data[["aoi.info"]])[[aoi.file.counter + start.index]] <- gsub(".txt", 
-                                                            ".png",
-                                                            aoi.file.list[aoi.file.counter])
+names(eyEdu.data[["aoi.info"]])[[
+  aoi.file.counter + start.index]] <- gsub(".txt",
+                                           ".png",
+                                           aoi.file.list[aoi.file.counter])
 
 rm(temp.df)
 
@@ -35,3 +40,4 @@ save(eyEdu.data, file = paste(raw.data.path, "eyEdu_data.Rda", sep = ""))
 
 }
 }
+
