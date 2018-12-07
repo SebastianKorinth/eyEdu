@@ -34,10 +34,12 @@ names(eyEdu.data[["aoi.info"]])[[
                                            ".png",
                                            aoi.file.list[aoi.file.counter])
 
-rm(temp.df)
+#rm(temp.df)
 
-save(eyEdu.data, file = paste(raw.data.path, "eyEdu_data.Rda", sep = ""))
+
 
 }
+save(eyEdu.data, file = paste(raw.data.path, "eyEdu_data.Rda", sep = ""))
+
 }
 

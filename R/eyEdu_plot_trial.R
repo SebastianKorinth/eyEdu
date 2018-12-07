@@ -140,7 +140,7 @@ trial.plot <- ggplot(trial.samples) +
            colour = sample.color, alpha = 1, na.rm=TRUE) + 
  geom_point(data = trial.fixations, aes(trial.fixations$fix.pos.x,
                                         trial.fixations$fix.pos.y, 
-                                        size = trial.fixations$fix.duration), 
+                                        size = 10 + trial.fixations$fix.duration), 
             colour = fix.color, alpha = 0.5, na.rm=TRUE) + 
  coord_fixed(ratio = 1) +  
  labs(x = NULL, y = NULL) + 
@@ -157,7 +157,7 @@ trial.plot <- ggplot(trial.samples) +
 
   } else {
     
-# The plot itself avg
+# plot for filtered raw data
 trial.plot <- ggplot(trial.samples) + 
  scale_y_reverse(lim = c(page.height, 0), breaks = NULL) + 
  scale_x_continuous(lim = c(0, page.width), breaks = NULL) + 
@@ -171,15 +171,15 @@ trial.plot <- ggplot(trial.samples) +
                                     ymin = trial.aoi$y.bottom, 
                                     ymax = trial.aoi$y.top, fill = F), 
            color = aoi.color, alpha = 0) +
- geom_path(data = trial.samples, aes(trial.samples$Lavgx,trial.samples$Lavgy), 
-           colour = sample.color.l, alpha = 1, na.rm=TRUE) + 
- geom_path(data = trial.samples, aes(trial.samples$Ravgx,trial.samples$Ravgy), 
-           colour = sample.color.r, alpha = 1, na.rm=TRUE) + 
- geom_path(data = trial.samples, aes(trial.samples$avgx,trial.samples$avgy), 
+ # geom_path(data = trial.samples, aes(trial.samples$Lavgx,trial.samples$Lavgy), 
+ #           colour = sample.color.l, alpha = 1, na.rm=TRUE) + 
+ # geom_path(data = trial.samples, aes(trial.samples$Ravgx,trial.samples$Ravgy), 
+ #           colour = sample.color.r, alpha = 1, na.rm=TRUE) + 
+ geom_path(data = trial.samples, aes(trial.samples$x.filt,trial.samples$y.filt), 
            colour = sample.color, alpha = 1, na.rm=TRUE) + 
  geom_point(data = trial.fixations, aes(trial.fixations$fix.pos.x,
                                         trial.fixations$fix.pos.y, 
-                                        size = trial.fixations$fix.duration), 
+                                        size = 10 + trial.fixations$fix.duration), 
             colour = fix.color, alpha = 0.5, na.rm=TRUE) + 
  coord_fixed(ratio = 1) +  
  labs(x = NULL, y = NULL) + 

@@ -58,9 +58,17 @@ eyEdu.data$participants[[participant.counter]]$
   fixation.data$aoi.label[eyEdu.data$participants[[participant.counter]]$
      fixation.data$trial.index == trial.counter] <- trial.subset$aoi.label
 } # end trial.counter
+
+# Providing some feedback on processing progress.
+processed.participant <- names(eyEdu.data$participants[participant.counter])
+print(paste("Assigning fixations to AoIs for participant: ",
+            processed.participant, 
+            "- number", participant.counter, 
+            "out of", 
+            max(length(eyEdu.data$participants)), sep = " "))
 } # end participant.counter
   
 save(eyEdu.data, file = paste(raw.data.path, "eyEdu_data.Rda", sep = ""))
-  
+return("Done!")  
 }
   

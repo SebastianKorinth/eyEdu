@@ -1,7 +1,8 @@
 EyEduPlotDiagnostics <- function(participant.nr = NA, 
                                  participant.name = NA, 
                                  trial.nr, 
-                                 sample.length = 2000){
+                                 sample.length = 2000,
+                                 show.filtered = FALSE){
 
 load(file = paste(raw.data.path, "eyEdu_data.Rda", sep = "")) 
   
@@ -23,10 +24,21 @@ load(file = paste(raw.data.path, "eyEdu_data.Rda", sep = ""))
            "Please run fixation detectionfirst: EyEduDetectFixationsIDT()!"))
       }  
 
+  if (show.filtered == TRUE & !is.null(eyEdu.data$participants[[
+    list.entry.nr]]$sample.data$x.filt) ) { 
+  
 # Extracts sample data for participant.nr and trial.nr
 plot.sample.posx <- eyEdu.data$participants[[
-  list.entry.nr]]$sample.data$rawx[eyEdu.data$participants[[
+  list.entry.nr]]$sample.data$x.filt[eyEdu.data$participants[[
     list.entry.nr]]$sample.data$trial.index == trial.nr]
+
+  }else {
+    # Extracts sample data for participant.nr and trial.nr
+    plot.sample.posx <- eyEdu.data$participants[[
+      list.entry.nr]]$sample.data$rawx[eyEdu.data$participants[[
+        list.entry.nr]]$sample.data$trial.index == trial.nr]
+    
+}
 
 # Extracts time line data for participant.nr and trial.nr
 plot.sample.time <- eyEdu.data$participants[[
@@ -69,11 +81,11 @@ end.point.fixation <- as.numeric(max(which(
   plot.fixation.df$plot.fixation.stop.time < sample.length)))
 
 
-# The plot itself
-diagnostic.plot <- ggplot() +
+# The plot itself 
+diagnostic.plot <- suppressWarnings(ggplot() +
 geom_path(data= plot.sample.df[1:end.point.sample,],mapping = aes(
   x=plot.sample.df$plot.sample.time[1:end.point.sample], 
-  y=plot.sample.df$plot.sample.posx[1:end.point.sample])) +
+  y=plot.sample.df$plot.sample.posx[1:end.point.sample]),na.rm=TRUE) +
   
 geom_rect(data=plot.fixation.df[1:end.point.fixation,], mapping=aes(
   xmin=plot.fixation.df$plot.fixation.start.time[1:end.point.fixation], 
@@ -89,7 +101,7 @@ labs(title = paste("participant #",
                      list.entry.nr]]$header.info$participant.name, 
                      "/ trial:", trial.nr), x="time in ms",
                      y="x direction pixels") +
-theme(plot.title = element_text(hjust = 0.5))
+theme(plot.title = element_text(hjust = 0.5)))
 
 return(diagnostic.plot)
 

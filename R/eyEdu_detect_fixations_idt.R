@@ -1,5 +1,6 @@
 EyEduDetectFixationsIDT <- function(dispersion.var = 70, 
-                                   duration.var = 7){
+                                   duration.var = 7,
+                                   use.filtered = TRUE) {
 
 load(file = paste(raw.data.path, "eyEdu_data.Rda", sep = ""))  
 
@@ -24,7 +25,23 @@ for(trial.counter in 1:max(eyEdu.data$participants[[
 # The warning message "max(y_win, na.rm = T) : 
 # no non-missing arguments to max; returning -Inf" will be suppressed
 
-fixation.data.temp = suppressWarnings(  emov.idt(eyEdu.data$participants[[
+  if (use.filtered == TRUE & !is.null(eyEdu.data$participants[[participant.counter]]$sample.data$x.filt)) {
+    
+    fixation.data.temp = suppressWarnings(  emov.idt(eyEdu.data$participants[[
+      participant.counter]]$sample.data$time[eyEdu.data$participants[[
+        participant.counter]]$sample.data$trial.index==trial.counter], 
+      eyEdu.data$participants[[participant.counter]]$sample.data$x.filt[
+        eyEdu.data$participants[[
+          participant.counter]]$sample.data$trial.index==trial.counter], 
+      eyEdu.data$participants[[participant.counter]]$sample.data$y.filt[
+        eyEdu.data$participants[[
+          participant.counter]]$sample.data$trial.index==trial.counter],
+      dispersion.var, 
+      duration.var))
+    
+  } else {
+  
+  fixation.data.temp = suppressWarnings(  emov.idt(eyEdu.data$participants[[
   participant.counter]]$sample.data$time[eyEdu.data$participants[[
   participant.counter]]$sample.data$trial.index==trial.counter], 
   eyEdu.data$participants[[participant.counter]]$sample.data$rawx[
@@ -34,9 +51,10 @@ fixation.data.temp = suppressWarnings(  emov.idt(eyEdu.data$participants[[
   eyEdu.data$participants[[
   participant.counter]]$sample.data$trial.index==trial.counter],
   dispersion.var, 
-  duration.var)
-)
+  duration.var))
 
+  }
+  
 if (nrow(fixation.data.temp) == 0) {
   next
 }
