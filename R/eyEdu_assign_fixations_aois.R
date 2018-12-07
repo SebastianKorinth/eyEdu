@@ -28,8 +28,7 @@ aoi.set.name <- eyEdu.data$participants[[participant.counter]]$
 if (sparse.aoi.definition == TRUE) {
   stim.id.only <- unlist(strsplit(aoi.set.name, "_"))[3]
   aoi.names <- names(eyEdu.data$aoi.info)
-  aoi.info.set <- eyEdu.data$aoi.info[[aoi.names[grep(stim.id.only, 
-                                                      aoi.names)]]]
+  aoi.info.set <- eyEdu.data$aoi.info[[aoi.names[grep(stim.id.only, aoi.names)[1]]]]
   
 } else {
 aoi.info.set <- eyEdu.data$aoi.info[[aoi.set.name]]
