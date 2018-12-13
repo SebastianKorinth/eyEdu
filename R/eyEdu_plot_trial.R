@@ -8,7 +8,7 @@ EyEduPlotTrial <- function(participant.nr = NA,
                           sample.color.l = NA,
                           sample.color = "darkviolet",
                           sample.type = "raw",
-                          sparse.aoi.definition = FALSE)
+                          sparse.aoi.definition = TRUE)
 {
 load(file = paste(raw.data.path, "eyEdu_data.Rda", sep = "")) 
 
@@ -111,7 +111,7 @@ background <- rasterGrob(background, interpolate = T)
 # Error warning if experiment dimension (Open Sesame) differs from screenshot
 if(page.height != eyEdu.data$participants[[
   list.entry.nr]]$header.info$display.y[1]) {
-  print("Screen dimensions of from experiment info and screenshots do not 
+  print("Screen dimensions from experiment info and screenshots do not 
 match. Screenshot dims will be used")
 }
 
@@ -140,7 +140,7 @@ trial.plot <- ggplot(trial.samples) +
            colour = sample.color, alpha = 1, na.rm=TRUE) + 
  geom_point(data = trial.fixations, aes(trial.fixations$fix.pos.x,
                                         trial.fixations$fix.pos.y, 
-                                        size = 10 + trial.fixations$fix.duration), 
+                                        size = trial.fixations$fix.duration), 
             colour = fix.color, alpha = 0.5, na.rm=TRUE) + 
  coord_fixed(ratio = 1) +  
  labs(x = NULL, y = NULL) + 
@@ -171,15 +171,15 @@ trial.plot <- ggplot(trial.samples) +
                                     ymin = trial.aoi$y.bottom, 
                                     ymax = trial.aoi$y.top, fill = F), 
            color = aoi.color, alpha = 0) +
- # geom_path(data = trial.samples, aes(trial.samples$Lavgx,trial.samples$Lavgy), 
- #           colour = sample.color.l, alpha = 1, na.rm=TRUE) + 
- # geom_path(data = trial.samples, aes(trial.samples$Ravgx,trial.samples$Ravgy), 
- #           colour = sample.color.r, alpha = 1, na.rm=TRUE) + 
+ geom_path(data = trial.samples, aes(trial.samples$L.x.filt,trial.samples$L.y.filt), 
+            colour = sample.color.l, alpha = 1, na.rm=TRUE) + 
+ geom_path(data = trial.samples, aes(trial.samples$R.x.filt,trial.samples$R.y.filt), 
+            colour = sample.color.r, alpha = 1, na.rm=TRUE) + 
  geom_path(data = trial.samples, aes(trial.samples$x.filt,trial.samples$y.filt), 
            colour = sample.color, alpha = 1, na.rm=TRUE) + 
  geom_point(data = trial.fixations, aes(trial.fixations$fix.pos.x,
                                         trial.fixations$fix.pos.y, 
-                                        size = 10 + trial.fixations$fix.duration), 
+                                        size = trial.fixations$fix.duration), 
             colour = fix.color, alpha = 0.5, na.rm=TRUE) + 
  coord_fixed(ratio = 1) +  
  labs(x = NULL, y = NULL) + 
