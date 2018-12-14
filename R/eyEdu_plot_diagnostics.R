@@ -24,8 +24,13 @@ load(file = paste(raw.data.path, "eyEdu_data.Rda", sep = ""))
            "Please run fixation detectionfirst: EyEduDetectFixationsIDT()!"))
       }  
 
-  if (show.filtered == TRUE & !is.null(eyEdu.data$participants[[
-    list.entry.nr]]$sample.data$x.filt) ) { 
+  if (show.filtered == TRUE) { 
+    
+    if(is.null(eyEdu.data$participants[[list.entry.nr]]$sample.data$x.filt)){
+      return("No filtered data available. Please run EyEduLowPassFilter() or set show.filtered = FALSE")
+    } 
+    
+    
   
 # Extracts sample data for participant.nr and trial.nr
 plot.sample.posx <- eyEdu.data$participants[[

@@ -1,6 +1,6 @@
 EyEduDetectFixationsIDT <- function(dispersion.var = 70, 
                                    duration.var = 7,
-                                   use.filtered = TRUE) {
+                                   use.filtered = FALSE) {
 
 load(file = paste(raw.data.path, "eyEdu_data.Rda", sep = ""))  
 
@@ -20,12 +20,18 @@ fixation.data <- data.frame(fix.start = numeric(),
 # conducted, and results are writen into a data frame labeled fixation.data
 
 for(trial.counter in 1:max(eyEdu.data$participants[[
-  participant.counter]]$trial.info$trial.index)) {  
+  participant.counter]]$trial.info$trial.index)) {
+  
+  if(use.filtered == TRUE & is.null(eyEdu.data$participants[[
+    participant.counter]]$sample.data$x.filt)){
+    return("No filtered data available. Please run EyEduLowPassFilter() or set use.filtered = FALSE")
+    
+  }
 
 # The warning message "max(y_win, na.rm = T) : 
 # no non-missing arguments to max; returning -Inf" will be suppressed
 
-  if (use.filtered == TRUE & !is.null(eyEdu.data$participants[[participant.counter]]$sample.data$x.filt)) {
+  if (use.filtered == TRUE ) {
     
     fixation.data.temp = suppressWarnings(  emov.idt(eyEdu.data$participants[[
       participant.counter]]$sample.data$time[eyEdu.data$participants[[

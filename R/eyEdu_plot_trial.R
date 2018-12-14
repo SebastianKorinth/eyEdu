@@ -7,7 +7,7 @@ EyEduPlotTrial <- function(participant.nr = NA,
                           sample.color.r = NA,
                           sample.color.l = NA,
                           sample.color = "darkviolet",
-                          sample.type = "raw",
+                          show.filtered = FALSE,
                           sparse.aoi.definition = TRUE)
 {
 load(file = paste(raw.data.path, "eyEdu_data.Rda", sep = "")) 
@@ -115,8 +115,8 @@ if(page.height != eyEdu.data$participants[[
 match. Screenshot dims will be used")
 }
 
-# Optional: show avg-sample points, raw is default  
-if(sample.type == "raw") {
+# Optional: show filtered data, raw is default  
+if(show.filtered == FALSE) {
 
 # The plot itself "raw"
 trial.plot <- ggplot(trial.samples) + 
@@ -157,7 +157,12 @@ trial.plot <- ggplot(trial.samples) +
 
   } else {
     
-# plot for filtered raw data
+    if(is.null(trial.samples$x.filt)){
+      return("No filtered data available. Please run EyEduLowPassFilter() or set show.filtered = FALSE")
+    }
+    
+    
+# plot for filtered data
 trial.plot <- ggplot(trial.samples) + 
  scale_y_reverse(lim = c(page.height, 0), breaks = NULL) + 
  scale_x_continuous(lim = c(0, page.width), breaks = NULL) + 
