@@ -1,11 +1,50 @@
 EyEduDetectFixationsIDT <- function(dispersion.var = 70, 
                                    duration.var = 7,
-                                   use.filtered = FALSE) {
+                                   use.filtered = FALSE,
+                                   participant.list = NULL) {
 
-load(file = paste(raw.data.path, "eyEdu_data.Rda", sep = ""))  
+load(file = paste(raw.data.path, "eyEdu_data.Rda", sep = "")) 
 
-for(participant.counter in 1:length(eyEdu.data$participants)){
-  
+# check whether fixation detection has been executed before, if not
+# variables in the participant table will be created that will collect
+# information about if and how fixation detection was performed
+if(is.null(eyEdu.data$participant.table$fixation.detection)){
+  eyEdu.data$participant.table$fixation.detection <- "No"
+  eyEdu.data$participant.table$duration.var <- NA
+  eyEdu.data$participant.table$dispersion.var <- NA
+  eyEdu.data$participant.table$filtered <- NA
+}  
+
+# checks whether fixation detection is limited to a subset of participants
+# default is all participants  
+if(is.null(participant.list)){
+  participant.vector <- 1:length(eyEdu.data$participants)
+  mismatch.indicator <- FALSE
+} 
+
+# for the case that participant numbers were provided to subset participants  
+if (is.numeric(participant.list)){
+  participant.vector <- eyEdu.data$participant.table$list.entry[
+    is.element(eyEdu.data$participant.table$part.nr,participant.list)]
+  if(length(participant.vector) != length(participant.list)){
+    mismatch.indicator <- TRUE
+  } else {mismatch.indicator <- FALSE}
+}    
+
+# for the case that participant names were provided to subset participants   
+if (is.character(participant.list)){
+    participant.vector <- eyEdu.data$participant.table$list.entry[
+      is.element(eyEdu.data$participant.table$part.name,participant.list)]
+  if(length(participant.vector) != length(participant.list)){
+    mismatch.indicator <- TRUE
+  } else {mismatch.indicator <- FALSE}
+  }    
+    
+# just for feedback on processing progress 
+iteration.counter <- 1  
+
+for(participant.counter in participant.vector){
+
 # Initiates empty data frame 
 fixation.data <- data.frame(fix.start = numeric(),
                             fix.end = numeric(), 
@@ -60,6 +99,7 @@ for(trial.counter in 1:max(eyEdu.data$participants[[
   duration.var))
 
   }
+
   
 if (nrow(fixation.data.temp) == 0) {
   next
@@ -79,21 +119,30 @@ fixation.data <- rbind(fixation.data, fixation.data.temp)
 }
 
 # The data frame fixation.data is written at its position corresponding to the
-# participant number within the eyEdu.data.Rda file 
+# list.entry number within the eyEdu.data.Rda file 
 eyEdu.data$participants[[participant.counter]][4] <- list(fixat=fixation.data)
 names(eyEdu.data$participants[[participant.counter]])[4]<- "fixation.data"
+
+# info about parameters used for fixation detection are written into participant table
+eyEdu.data$participant.table$fixation.detection[participant.counter] <- "Yes"
+eyEdu.data$participant.table$duration.var[participant.counter] <- duration.var
+eyEdu.data$participant.table$dispersion.var[participant.counter] <- dispersion.var
+eyEdu.data$participant.table$filtered[participant.counter] <- use.filtered
 
 # Providing some feedback on processing progress.
 processed.participant <- names(eyEdu.data$participants[participant.counter])
 print(paste("Fixation detection for:",
             processed.participant, 
-            "- number", participant.counter, 
+            "- number", iteration.counter, 
             "out of", 
-            max(length(eyEdu.data$participants)), sep = " "))
+            length(participant.vector), sep = " "))
+
+iteration.counter <- iteration.counter + 1
+
 }
 
 save(eyEdu.data, file = paste(raw.data.path, "eyEdu_data.Rda", sep = ""))
-
+if(mismatch.indicator == T) {return("There was a mismatch between participant.list and actually processed participants!")}
 return("Done!")
 }
 
