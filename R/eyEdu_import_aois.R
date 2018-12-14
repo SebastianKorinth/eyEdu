@@ -1,18 +1,22 @@
 
-EyEduImportAoIs <- function(append.aois = T){
+EyEduImportAoIs <- function(append.aois = TRUE,
+                            delete.existing.aois = FALSE){
+  
+  # loads the eyEdu data frame to which the aoi.files will be added
+  load(paste(raw.data.path, "eyEdu_data.Rda", sep = ""))  
 
 if (file.exists(paste(raw.data.path, "aoiFiles", sep = "")) == F ){
  return("Can't find folder containing aoi files!")
  } 
-  
+
+if (delete.existing.aois == TRUE) {
+  eyEdu.data$aoi.info[] <- NULL
+}  
+    
 # list of aoi.files
 aoi.file.list <- list.files(path= paste(raw.data.path, "aoiFiles/", sep = ""),
                             pattern = "\\.txt$")
   
-# loads the eyEdu data frame to which the aoi.files will be added
-load(paste(raw.data.path, "eyEdu_data.Rda", sep = ""))
-
-
 present.aoi.length <- length(eyEdu.data[["aoi.info"]])
 
 if (append.aois == T) {
