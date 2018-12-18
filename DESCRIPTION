@@ -19,3 +19,4 @@ Imports:
     grid,
     emov,
     reshape2
+RoxygenNote: 6.1.1
