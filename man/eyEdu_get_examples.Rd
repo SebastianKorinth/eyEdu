@@ -2,7 +2,7 @@
 \alias{EyEduGetExamples}
 
 \title{
-EyEduGetExamples(experiment.type = "reading")
+Download Example Data for eyEdu
 }
 \description{
 
@@ -16,9 +16,8 @@ EyEduGetExamples(experiment.type = "...")
 }
 
 \arguments{
-  \item{x}{
-experiment.type = x
-currently either "reading" or "search"
+  \item{"..."}{
+kind of eye-tracking experiment, either "reading" or "search"
 
 }
 }
@@ -40,7 +39,8 @@ currently either "reading" or "search"
 Sebastian Korinth & Dejan Draschkow
 }
 \note{
-%%  ~~further notes~~
+Check whether you have set your working directory properly. Example data will be
+downloaded and unzipped into the current working directory - getwd().
 }
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
@@ -49,14 +49,8 @@ Sebastian Korinth & Dejan Draschkow
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-##---- Should be DIRECTLY executable !! ----
-##-- ==>  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
+EyEduGetExamples(experiment.type = "reading")
 
-## The function is currently defined as
-function (x)
-{
-  }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
