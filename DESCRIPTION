@@ -15,7 +15,6 @@ Imports:
     png,
     shiny,
     ggplot2,
-    EBImage,
     grid,
     emov,
     reshape2
