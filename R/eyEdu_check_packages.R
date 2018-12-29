@@ -4,12 +4,6 @@
 EyEduCheckPackages <- function(){
 
 
-if (!require("EBImage")) {
-  source("https://bioconductor.org/biocLite.R")
-  biocLite("EBImage")
-  library(EBImage)
-}
-
   if (!require("png")) {
     install.packages("png", dependencies = TRUE)
     library(png)

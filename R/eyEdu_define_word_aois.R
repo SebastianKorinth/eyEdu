@@ -30,14 +30,16 @@ if (sparse.aoi.definition == T) {
 for(file.counter in 1 : length(file.names)){
 
 # Reads file
-text.image <- readImage(paste(inpath, file.names[file.counter], sep="/"))
-# Reduces image from RGB to grey scale
-text.image <-channel(text.image,"gray")
-text.image <- text.image@.Data
+text.image <- readPNG(paste(inpath, file.names[file.counter], sep="/"))
+
+# Reduces the three matrices (RGB) to one mean matrix
+text.image <- (text.image[,,1] + text.image[,,2] + text.image[,,3])/3
 # Rounds to only 1 = background and 0 = black values 
 text.image <- round(text.image) 
 # Inverse matrix now 0 = background, 1 = text
 text.image <- (text.image -1) * -1 
+# Transposes image matrix
+text.image <- t(text.image)
 # Extracts image dimensions
 image.width <- nrow(text.image)
 image.height <- ncol(text.image)
