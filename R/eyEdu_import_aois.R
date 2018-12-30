@@ -45,8 +45,12 @@ temp.df <- read.table(file = paste(raw.data.path, "aoiFiles/",
                                    aoi.file.list[aoi.file.counter], 
                                    sep = ""), 
                       header = T, sep = " ", stringsAsFactors = F)
-temp.df[,2:3] <- temp.df[,2:3]+ adjust.x
-temp.df[,4:5] <- temp.df[,4:5]+ adjust.y
+
+temp.df$x.left <- temp.df$x.left + adjust.x
+temp.df$x.right <- temp.df$x.right + adjust.x
+temp.df$y.top <- temp.df$y.top + adjust.y
+temp.df$y.bottom <- temp.df$y.bottom + adjust.y
+
 
 eyEdu.data[["aoi.info"]][[aoi.file.counter + start.index]] <- temp.df
 names(eyEdu.data[["aoi.info"]])[[
