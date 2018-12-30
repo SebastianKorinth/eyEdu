@@ -26,7 +26,7 @@ if (append.aois == T) {
 start.index <- present.aoi.length 
 } 
 else {
- start.index <- 1
+ start.index <- 0
 }
 
 if(!is.null(screen.align.x) ){
