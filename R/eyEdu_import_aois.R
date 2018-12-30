@@ -24,8 +24,7 @@ present.aoi.length <- length(eyEdu.data[["aoi.info"]])
 
 if (append.aois == T) {
 start.index <- present.aoi.length 
-} 
-else {
+} else {
  start.index <- 0
 }
 
