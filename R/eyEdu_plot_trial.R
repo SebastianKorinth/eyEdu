@@ -8,8 +8,9 @@ EyEduPlotTrial <- function(participant.nr = NA,
                           sample.color.l = NA,
                           sample.color = "darkviolet",
                           show.filtered = FALSE,
-                          sparse.aoi.definition = TRUE)
-{
+                          sparse.aoi.definition = TRUE,
+                          aoi.names.screenshot = FALSE){
+
 load(file = paste(raw.data.path, "eyEdu_data.Rda", sep = "")) 
 
 # Two options: either participant name or participant number can be provided 
@@ -24,6 +25,12 @@ if (is.na(participant.name)) {
                          == participant.name)
 }
 
+# Stimulus.id belonging to trial.nr
+stimulus.id <- as.numeric(eyEdu.data$participants[[
+    list.entry.nr]]$trial.info$stimulus.id[trial.nr])  
+  
+  
+############# samples #################
 # Extracts relevant samples
 trial.samples <- subset(eyEdu.data$participants[[list.entry.nr]]$sample.data,
                           eyEdu.data$participants[[
@@ -31,6 +38,7 @@ trial.samples <- subset(eyEdu.data$participants[[list.entry.nr]]$sample.data,
                         == trial.nr)
 
 
+############# fixations #################
 # Extractes relevant fixations; if fixation detection was conducted, if not,
 # a dummy data frame will be created
 
@@ -50,12 +58,33 @@ if (is.null(eyEdu.data$participants[[list.entry.nr]]$fixation.data)) {
       list.entry.nr]]$fixation.data$trial.index == trial.nr)
 }
 
-# Stimulus.id belonging to trial.nr
-stimulus.id <- as.numeric(eyEdu.data$participants[[
-list.entry.nr]]$trial.info$stimulus.id[trial.nr])
+########## aoi sets ############
+if(aoi.names.screenshot == F) {
   
+  # Generates name for relevant aoi file taken from stimulus message instead of screenshot
+  aoi.stimulus.message <- eyEdu.data$participants[[list.entry.nr]]$trial.info$stimulus.message[
+    eyEdu.data$participants[[list.entry.nr]]$trial.info$trial.index == trial.nr]
+  
+  aoi.stimulus.message <- paste(aoi.stimulus.message,".png", sep ="")
+  
+  # Extracts relevant aoi.info
+  trial.aoi <- eyEdu.data$aoi.info[[aoi.stimulus.message]]
+  if(is.null(trial.aoi)){
+    trial.aoi <- data.frame(line.aoi.index = 0,
+                            x.left = 0,
+                            x.right = 0,
+                            y.top = 0,
+                            y.bottom = 0,
+                            line.number = 0,
+                            image.name = NA,
+                            aoi.index =0)
+  }
+  
+  }else{
+
+
 # Index of aoi.info corresponding to stimulus id, since any given stimulus.id
-# most likely appears several times (e.g., different combinations of tria and
+# most likely appears several times (e.g., different combinations of trial and
 # participant) only the first match of all possible matches will be used.
 
 if (is.null(eyEdu.data$aoi.info)) {
@@ -82,9 +111,11 @@ if (is.null(eyEdu.data$aoi.info)) {
                             line.number = 0,
                             image.name = NA,
                             aoi.index =0)
-  }
-}
+    }
+    }}
 
+
+##### background image #####
 if (sparse.aoi.definition == TRUE){
   image.list <- list.files(paste(raw.data.path, "images/", sep = ""))
   stim.id.file.names <- gsub(".*_", "", image.list)
@@ -94,14 +125,16 @@ if (sparse.aoi.definition == TRUE){
   image.index <- image.list[which(stim.id.file.names == stim.id.concat)[1]]
   background.image.file <- paste(raw.data.path, "images/",image.index, sep = "")
 
-} else {
+} 
+
 # Stimulus.id corresponding to background file
 image.list <- list.files(paste(raw.data.path, "images/", sep = ""))
 image.index <- eyEdu.data$participants[[
   list.entry.nr]]$trial.info$background.image[trial.nr]
 background.image.file  <- paste(raw.data.path, "images/",image.index, sep = "")
 
-}
+
+
 # Loads background image
 background <- readPNG(background.image.file)
 page.width <- dim(background)[2]
@@ -115,6 +148,8 @@ if(page.height != eyEdu.data$participants[[
 match. Screenshot dims will be used")
 }
 
+
+######## plots #########
 # Optional: show filtered data, raw is default  
 if(show.filtered == FALSE) {
 
