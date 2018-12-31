@@ -1,4 +1,5 @@
-EyEduAssignFixationsAois <- function(sparse.aoi.definition = TRUE){
+EyEduAssignFixationsAois <- function(sparse.aoi.definition = TRUE,
+                                     aoi.names.screenshot = FALSE){
 
 load(paste(raw.data.path, "eyEdu_data.Rda", sep = ""))
 
@@ -20,6 +21,14 @@ trial.subset <- subset(eyEdu.data$participants[[participant.counter]]$
                           fixation.data, 
                         eyEdu.data$participants[[participant.counter]]$
                           fixation.data$trial.index == trial.counter)
+
+if(aoi.names.screenshot == FALSE) {
+  
+  aoi.set.name <- paste(eyEdu.data$participants[[participant.counter]]$
+    trial.info$stimulus.message[trial.counter], ".png", sep = "")
+  aoi.info.set <- eyEdu.data$aoi.info[[aoi.set.name]]
+  
+} else {
     
 # chosing the corresponding aoi.info set 
 aoi.set.name <- eyEdu.data$participants[[participant.counter]]$
@@ -32,7 +41,7 @@ if (sparse.aoi.definition == TRUE) {
   
 } else {
 aoi.info.set <- eyEdu.data$aoi.info[[aoi.set.name]]
-}
+}}
 
 # loops through aois  
 for(aoi.counter in 1: nrow(aoi.info.set)) {
