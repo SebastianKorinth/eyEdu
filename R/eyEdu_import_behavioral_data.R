@@ -13,7 +13,7 @@ EyEduImportBehavioralData <- function(selection = c(colnames(behav_dat))){
     jj$participant.name <- jj$Participant
 
     # in case there is no dtplyr package - use plyr solution
-    behav_dat <- plyr::rbind(behav_dat, jj)
+    behav_dat <- plyr::rbind.fill(behav_dat, jj)
 
     # select important variables
     # choose the variables your interested in, by default all are selected
