@@ -16,12 +16,12 @@ EyEduImportBehavioralData <- function(raw.data.path,
     # in case there is no dtplyr package - use plyr solution
     behav_dat <- plyr::rbind.fill(behav_dat, jj)
 
-    # select important variables
-    # choose the variables your interested in, by default all are selected
-    behav_dat      <- subset(behav_dat, select = selection) #Make your selection
     # Providing some feedback on processing progress.
     print(paste("The file:", file, "has been imported successfully.", sep = " "))
   }
+  # select important variables
+  # choose the variables your interested in, by default all are selected
+  behav_dat      <- subset(behav_dat, select = selection) #Make your selection
 
   writeLines("All available files were imported and row-bound.\n Columns are matched by name, and any values that don't match will be filled with NA.")
   #  print("Columns are matched by name, and any values that don't match will be filled with NA")
