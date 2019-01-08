@@ -9,7 +9,7 @@ EyEduImportBehavioralData <- function(raw.data.path,
     fileName <- gsub(".csv", "", file)
     jj$Participant <- factor(fileName)
     jj$start <- NULL
-    jj$trial.Index <- 1:nrow(jj)
+    jj$trial.index <- 1:nrow(jj)
     jj$participant.nr <- jj$subject_nr
     jj$participant.name <- jj$Participant
 
