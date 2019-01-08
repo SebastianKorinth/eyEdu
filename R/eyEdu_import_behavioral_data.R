@@ -1,4 +1,5 @@
-EyEduImportBehavioralData <- function(selection = c(colnames(behav_dat))){
+EyEduImportBehavioralData <- function(raw.data.path,
+                                      selection = c(colnames(behav_dat))){
 
   (file.list <- list.files(raw.data.path , pattern = "csv", recursive = F))
 
@@ -17,7 +18,7 @@ EyEduImportBehavioralData <- function(selection = c(colnames(behav_dat))){
 
     # select important variables
     # choose the variables your interested in, by default all are selected
-    behav_dat      <- subset(behav_dat_all, select = selection) #Make your selection
+    behav_dat      <- subset(behav_dat, select = selection) #Make your selection
     # Providing some feedback on processing progress.
     print(paste("The file:", file, "has been imported successfully.", sep = " "))
   }
