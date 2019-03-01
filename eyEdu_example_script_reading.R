@@ -29,7 +29,7 @@ EyEduGetExamples(experiment.type = "reading")
 # Some eyEdu functions require the argument raw.data.path, which is the path,
 # where raw data are stored. If you used the example reading experiment,
 # this will be:
-raw.data.path <- "D:/Dropbox/eyEdu/Test eyEdu/exampleDataReadingExperiment-master/"
+raw.data.path <- paste(getwd(),"/exampleDataReadingExperiment-master/", sep = "")
 # potential pitfall: Please provide absolut path (relative paths might not work)
 # potential pitfall: Make sure the path ends with a forward slash!
 # potential pitfall: Check that you use forward shlashes (Windows issue)
@@ -42,11 +42,22 @@ raw.data.path <- "D:/Dropbox/eyEdu/Test eyEdu/exampleDataReadingExperiment-maste
 EyEduImportRawData(poi.end = "response_time_key_finish_reading")
 
 
+################################
+# for very noisy data low pass filtering might help
+EyEduLowPassFilter(filter.settings = rep(1/3, 3))
+
+###############
+EyEduShowParticipantTable()
+
+
 ########################################################################
 # Fixation detection: This function uses the emov library by Simon Schwab
 # and its I-DT algorith (Salvucci & Goldberg, 2000), which uses dispersion
 # limits to distinguish between fixations and saccades.
-EyEduDetectFixationsIDT(dispersion.var = 90,duration.var = 6)
+EyEduDetectFixationsIDT(dispersion.var = 90,
+                        duration.var = 6,
+                        use.filtered = F,
+                        participant.list = c(2,5))
 
 ########################################################################
 # EyEduPlotDiagnostics() plots the eye-tracker samples over given length
@@ -58,25 +69,30 @@ EyEduPlotDiagnostics(participant.nr = 5,trial.nr = 2,sample.length = 2500)
 # For reading experiments only!
 # The EyEduDefineWordAois() function parses screenshots of reading experiments
 # into areas of interes (aoi)
-EyEduDefineWordAois(line.margin = 27,sparse = T)
+EyEduDefineWordAois(line.margin = 70,sparse = T)
 
 ########################################################################
 # EyEduPlotTrial(). Several arguments allow to show or hide the left, the
 # right or the average sample position etc.
 EyEduPlotTrial(participant.nr = 5, trial.nr = 2,
-               sample.type = "raw",
+               show.filtered = F,
                sample.color.r = NA,
                sample.color.l = NA,
-               sample.color = "blueviolet")
+               sample.color = "blueviolet",
+               aoi.names.screenshot = T)
 # another example that uses participant name instead of number
 EyEduPlotTrial(participant.name = "karl",
                trial.nr = 7,
-               sample.type = "raw",
                fix.color = "green" )
 
+
+# for reading experiments only assigns aoi labels from stimulus message info
+EyEduImportWordAoiLabels(sparse.aoi.definition = T,extra.aoi = "end_point")
+
+
 ########################################################################
-# EyEduCollateFixationsAois() assignes fixations to areas of interest
-EyEduCollateFixationsAois()
+# EyEduAssignFixationsAois() assignes fixations to areas of interest
+EyEduAssignFixationsAois()
 
 #######################################################################
 # EyEduGetFixationSummary() collects the fixation information of all participants
@@ -92,3 +108,14 @@ EyEduShinyAoiRectangle()
 # EyEduGetFixationSummary() collects the fixation information of all participants
 # and summarizes it into one data frame
 EyEduImportAoIs(append.aois = T)
+
+
+#####################################################################
+# for clicking through lots of trials quickly, image of trial plots can be
+# created using batch
+EyEduBatchPlotTrials(participant.nr.list <- c(1,5,8),
+                     fix.color = "green",
+                     sample.color.r = "red",
+                     sample.color.l = "blue", sample.color = NA)
+
+
