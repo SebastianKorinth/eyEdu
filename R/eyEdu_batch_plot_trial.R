@@ -12,21 +12,36 @@ EyEduBatchPlotTrials <- function(participant.nr.list = NULL,
 
 load(paste(raw.data.path, "eyEdu_data.Rda", sep = ""))
 
+# trial plots can be created for selected or for all participants
+# if no participant number list is provided the default output
+# will be all participants
+  
 if (is.null(participant.nr.list)) {
   participant.index.vector <- 1:length(eyEdu.data$participants)
 }else{
   participant.index.vector <- eyEdu.data$participant.table$part.nr
-  participant.index.vector <- eyEdu.data$participant.table$list.entry[participant.index.vector %in%  participant.nr.list]
+  participant.index.vector <- eyEdu.data$participant.table$list.entry[
+    participant.index.vector %in%  participant.nr.list]
 }
 
+  
 for(participant.index in participant.index.vector){
   
   # creates a folder in the working directory for each participant
-  folder.name <- eyEdu.data$participant.table$part.name[eyEdu.data$participant.table$list.entry == participant.index]
+  participant.name <- eyEdu.data$participant.table$part.name[
+    eyEdu.data$participant.table$list.entry == participant.index]
+  folder.name <- paste(participant.name, " trialPlots", sep = "")
   dir.create(paste(getwd(),"/",folder.name, sep = ""))
 
-  trial.vector <- 1: eyEdu.data$participants[[participant.index]]$header.info$trial.count
-  print(paste("Trial plots will be created for:", folder.name, sep = " "))
+  trial.vector <- 1: eyEdu.data$participants[[
+    participant.index]]$header.info$trial.count
+# some processing feedback
+    print(paste("Creating trial plots for:", participant.name, "- number",
+              which(participant.index.vector == participant.index), 
+              "out of",
+              length(participant.index.vector),
+              sep = " "))
+  
   for(trial.index in trial.vector ){
     
     image.file.name <- paste(getwd(),"/",
@@ -35,10 +50,11 @@ for(participant.index in participant.index.vector){
                              trial.index,
                              ".png",
                              sep = "")
-    
+
+    # opens png device
     png(image.file.name, width = image.width, height = image.height)
-    
-    plot(EyEduPlotTrial(participant.name = folder.name,
+    # uses eyEdu plot function
+    plot(EyEduPlotTrial(participant.name = participant.name,
                         trial.nr = trial.index,
                         sparse.aoi.definition = sparse.aoi.definition,
                         aoi.names.screenshot = aoi.names.screenshot,
@@ -47,12 +63,10 @@ for(participant.index in participant.index.vector){
                         sample.color.r = sample.color.r,
                         sample.color.l = sample.color.l,
                         sample.color = sample.color,
-                        show.filtered = FALSE))
+                        show.filtered = show.filtered))    
     
     dev.off()
-  }# end trial loop
-  
-} # end participant loop
- 
-  
+  }
+}
+  print("Done!")
 }
