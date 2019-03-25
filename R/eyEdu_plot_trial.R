@@ -1,6 +1,6 @@
 
 EyEduPlotTrial <- function(participant.nr = NA, 
-                          trial.nr,
+                          trial.nr = NA,
                           participant.name = NA,
                           aoi.color = "black",
                           fix.color = "red",
@@ -9,9 +9,12 @@ EyEduPlotTrial <- function(participant.nr = NA,
                           sample.color = "darkviolet",
                           show.filtered = FALSE,
                           sparse.aoi.definition = TRUE,
-                          aoi.names.screenshot = FALSE){
+                          aoi.names.screenshot = TRUE){
 
-load(file = paste(raw.data.path, "eyEdu_data.Rda", sep = "")) 
+# checks if eyEdu.data is loaded already, if not will be loaded
+  if(!exists("eyEdu.data")) {
+    load(file = paste(raw.data.path, "eyEdu_data.Rda", sep = "")) 
+  }
 
 # Two options: either participant name or participant number can be provided 
 if (is.na(participant.name)) {
@@ -39,7 +42,7 @@ trial.samples <- subset(eyEdu.data$participants[[list.entry.nr]]$sample.data,
 
 
 ############# fixations #################
-# Extractes relevant fixations; if fixation detection was conducted, if not,
+# Extractes relevant fixations if fixation detection was conducted; if not,
 # a dummy data frame will be created
 
 if (is.null(eyEdu.data$participants[[list.entry.nr]]$fixation.data)) {
@@ -125,14 +128,14 @@ if (sparse.aoi.definition == TRUE){
   image.index <- image.list[which(stim.id.file.names == stim.id.concat)[1]]
   background.image.file <- paste(raw.data.path, "images/",image.index, sep = "")
 
-} 
+} else { 
 
 # Stimulus.id corresponding to background file
 image.list <- list.files(paste(raw.data.path, "images/", sep = ""))
 image.index <- eyEdu.data$participants[[
   list.entry.nr]]$trial.info$background.image[trial.nr]
 background.image.file  <- paste(raw.data.path, "images/",image.index, sep = "")
-
+}
 
 
 # Loads background image
