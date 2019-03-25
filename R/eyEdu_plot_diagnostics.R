@@ -4,8 +4,12 @@ EyEduPlotDiagnostics <- function(participant.nr = NA,
                                  sample.length = 2000,
                                  show.filtered = FALSE){
 
-load(file = paste(raw.data.path, "eyEdu_data.Rda", sep = "")) 
-  
+
+# checks if eyEdu.data is loaded already, if not will be loaded
+  if(!exists("eyEdu.data")) {
+    load(file = paste(raw.data.path, "eyEdu_data.Rda", sep = "")) 
+  }
+
   # Two options: either participant name or participant number can be provided 
   if (is.na(participant.name)) {
     # use participant number
