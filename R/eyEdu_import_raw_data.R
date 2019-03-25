@@ -19,7 +19,7 @@ names(eyEdu.data$participants) = raw.file.list
 # Loops through files 
 for(file.counter in 1:length(raw.file.list)) {
 raw.data <- read.csv(paste(raw.data.path, raw.file.list[file.counter],
-                     sep = ""),sep="\t", header=T, encoding = "UTF-8",
+                     sep = ""),sep="\t", header=T, fileEncoding = "UTF-8",
                      strip.white=TRUE, stringsAsFactors=FALSE)
 
 raw.data$time <- suppressWarnings(as.numeric(raw.data$time))
