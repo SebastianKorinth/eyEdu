@@ -1,5 +1,5 @@
 EyEduAssignFixationsAois <- function(sparse.aoi.definition = TRUE,
-                                     aoi.names.screenshot = FALSE){
+                                     aoi.names.screenshot = TRUE){
 
 load(paste(raw.data.path, "eyEdu_data.Rda", sep = ""))
 
@@ -48,6 +48,12 @@ if (sparse.aoi.definition == TRUE) {
 } else {
 aoi.info.set <- eyEdu.data$aoi.info[[aoi.set.name]]
 }}
+
+# exception, for instance, if trials are missing 
+
+if(is.null(aoi.info.set)){
+  next
+  }
 
 # loops through aois  
 for(aoi.counter in 1: nrow(aoi.info.set)) {
