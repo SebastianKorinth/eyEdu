@@ -35,9 +35,15 @@ aoi.set.name <- eyEdu.data$participants[[participant.counter]]$
  trial.info$background.image[trial.counter]
 
 if (sparse.aoi.definition == TRUE) {
-  stim.id.only <- unlist(strsplit(aoi.set.name, "_"))[3]
-  aoi.names <- names(eyEdu.data$aoi.info)
-  aoi.info.set <- eyEdu.data$aoi.info[[aoi.names[grep(stim.id.only, aoi.names)[1]]]]
+  # stim.id.only <- unlist(strsplit(aoi.set.name, "_"))[3]
+  # aoi.names <- names(eyEdu.data$aoi.info)
+  # aoi.info.set <- eyEdu.data$aoi.info[[aoi.names[grep(stim.id.only, aoi.names)[1]]]]
+  
+  stimulus.id <- trial.subset$stimulus.id[1] 
+  aoi.index <- grep(paste("*_", stimulus.id,".png", sep =""), 
+                    names(eyEdu.data$aoi.info))[1]
+  aoi.info.set <- eyEdu.data$aoi.info[[aoi.index]]
+  
   
 } else {
 aoi.info.set <- eyEdu.data$aoi.info[[aoi.set.name]]
