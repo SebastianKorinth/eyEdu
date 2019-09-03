@@ -49,6 +49,9 @@ EyEdu is not on CRAN, but the development version can be installed from GitHub u
 ``` r
  library(eyEdu)
 ```
+Linux users: Installing the devtools package is a bit more challenging. You might try the guide provided here:
+https://www.digitalocean.com/community/tutorials/how-to-install-r-packages-using-devtools-on-ubuntu-18-04
+
 
 Examples for reading experiment
 -------------------------------
