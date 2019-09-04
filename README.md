@@ -154,14 +154,16 @@ EyEduGetExamples() is a convenience function to download example data and experi
 ### Importing raw data
 
 ``` r
-EyEduImportRawData()
+EyEduImportEyetribeData() 
+EyEduImportGazepointData()
 # Example
-EyEduImportRawData(poi.start = "start_trial", 
+EyEduImportEyetribeData(poi.start = "start_trial", 
                    poi.end = "response_time_key_finish_reading")
 ```
 
-EyEduImportRawData() imports raw data, that is, tsv-files recorded using a setup of [EyeTribe](http://theeyetribe.com/theeyetribe.com/about/index.html), [OpenSesame](https://osdoc.cogsci.nl/) and [PyGaze](http://www.pygaze.org/). The functions reads the files for all participants, separates eye movement data from message information, extracts relevant information (e.g., screen dimensions, sample rate etc.) and adds this to one structured file called eyEdu\_data.Rda, which is saved in the same folder as the raw data.
+EyEduImportEyetribeData() imports raw data, that is, tsv-files recorded using a setup of [EyeTribe](http://theeyetribe.com/theeyetribe.com/about/index.html), [OpenSesame](https://osdoc.cogsci.nl/) and [PyGaze](http://www.pygaze.org/). The functions reads the files for all participants, separates eye movement data from message information, extracts relevant information (e.g., screen dimensions, sample rate etc.) and adds this to one structured file called eyEdu\_data.Rda, which is saved in the same folder as the raw data.
 Currently, there are two arguments that can be changed, that is, *poi.start* and *poi.end*. Both arguments denote the messages setting the limits for periods of interest (poi). The default setting - leaving these arguments undefined - is "start\_trial" and "stop\_trial", which imports complete trials.
+EyEduImportGazepointData() provides the same function for data collected using a [GazePoint](https://www.gazept.com/) setup.
 
 *Note*: The variable raw.data.path pointing to the folder containing the raw data must currently be defined BEFORE calling the import function:
 
