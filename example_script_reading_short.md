@@ -40,13 +40,13 @@ Potential pitfall: Check that you use forward slashes (Windows issue)!
 
 ### Importing raw eye movement data into eyEdu format
 
-EyEduImportRawData() reads raw data (.tsv files), separates eye movement from message information, extracts relevant information (e.g., screen dimensions, sample rate etc.), and saves these data for all participants into one structured file called eyEdu\_data.Rda within the raw data folder.
+EyEduImportEyetribeData() reads raw data (.tsv files), separates eye movement from message information, extracts relevant information (e.g., screen dimensions, sample rate etc.), and saves these data for all participants into one structured file called eyEdu\_data.Rda within the raw data folder.
 In this example, eight participants read ten single line sentences and responded afterwards to comprehension questions.
 
 Since we are not interested in eye movements associated with question processing, we will segment each trial into periods of interest (poi), that are limited by the messages "start trail" (= default, not explicitly parsed to the function) until "response\_time\_key\_finish\_reading".
 
 ``` r
-EyEduImportRawData(poi.end = "response_time_key_finish_reading")
+EyEduImportEyetribeData(poi.end = "response_time_key_finish_reading")
 ```
 
     ## [1] "Importing file: Clara.tsv - number 1 out of 8"
@@ -59,6 +59,12 @@ EyEduImportRawData(poi.end = "response_time_key_finish_reading")
     ## [1] "Importing file: Vladimir.tsv - number 8 out of 8"
 
     ## [1] "Done!"
+
+Alternatively, there is a function that reads data recorded with a GazePoint eye-tracker called EyEduImportGazepointData().
+
+``` r
+EyEduImportGazepointData(poi.end = "response_time_key_finish_reading")
+```
 
 ### Visualizing single trials
 
