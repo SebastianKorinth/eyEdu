@@ -123,7 +123,7 @@ trial.info$background.image <- paste(participant.nr, "_",
                                      "_", trial.info$stimulus.id,
                                      ".png", sep = "")
 
-# Adds calibration report results 
+# Adds calibration report results: Precesion
 cal.df <- message.data[grepl("precision", message.data$state),]
 cal.df$precision.x <- sapply(strsplit(as.character(cal.df$state),' '),"[",6)
 cal.df$precision.x <- gsub("X=", "", cal.df$precision.x)
@@ -136,6 +136,26 @@ for (calibration.counter in 1 : nrow(cal.df)){
   prec.index <- which.min(abs(time.diff))
   trial.info$qc_precision[prec.index : nrow(trial.info)] <- cal.df$precision.x[calibration.counter]
   }
+
+
+# Adds calibration report results: accuracy in pixels
+cal.df <- message.data[grepl("accuracy \\(\\in pix", message.data$state),]
+cal.df$cal.accuracy.x.l <- sapply(strsplit(as.character(cal.df$state),' '),"[",4)
+cal.df$cal.accuracy.x.l <- gsub("LX=", "", cal.df$cal.accuracy.x.l)
+cal.df$cal.accuracy.x.l <- as.numeric(gsub(",", "", cal.df$cal.accuracy.x.l))
+
+cal.df$cal.accuracy.x.r <- sapply(strsplit(as.character(cal.df$state),' '),"[",6)
+cal.df$cal.accuracy.x.r <- gsub("RX=", "", cal.df$cal.accuracy.x.r)
+cal.df$cal.accuracy.x.r <- as.numeric(gsub(",", "", cal.df$cal.accuracy.x.r))
+cal.df$cal.accuracy.x <- (cal.df$cal.accuracy.x.l + cal.df$cal.accuracy.x.r)/2
+cal.df <- cal.df[, c(2,33)]
+trial.info$qc_cali.accuracy <- NA
+
+for (calibration.counter in 1 : nrow(cal.df)){
+  time.diff <- trial.info$start.message - cal.df$time[calibration.counter]
+  prec.index <- which.min(abs(time.diff))
+  trial.info$qc_cali.accuracy[prec.index : nrow(trial.info)] <- cal.df$cal.accuracy.x[calibration.counter]
+}
 
 # Loop searches for rownames in eye movement data, wich correspond 
 # to time points of start and stop messages. Note, timing of eye movement data 
