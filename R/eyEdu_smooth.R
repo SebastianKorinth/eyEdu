@@ -14,10 +14,14 @@ EyEduSmooth <- function() {
     L.y.filt <- NA
     
     for(trial.counter in 1:max(eyEdu.data$participants[[
-      participant.counter]]$trial.info$trial.index)) {  
+      participant.counter]]$sample.data$trial.index)) {  
       
       trial.sample.data <- sample.data[sample.data$trial.index == trial.counter,]
 
+      if(nrow(trial.sample.data) < 2){
+        next
+        }
+      
       # Extracts sample data 
       x.filt.temp <- trial.sample.data$rawx
       y.filt.temp <- trial.sample.data$rawy
