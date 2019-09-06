@@ -58,6 +58,16 @@ names(eyEdu.data[["aoi.info"]])[[
                                            ".png",
                                            aoi.file.list[aoi.file.counter])
 
+# Providing some feedback on processing progress.
+processed.aoi.file <- aoi.file.list[aoi.file.counter]
+print(paste("Importing aoi file: ",
+            processed.aoi.file,
+            "- number", aoi.file.counter,
+            "out of",
+            length(aoi.file.list), sep = " "))
+
+
+
 }
 save(eyEdu.data, file = paste(raw.data.path, "eyEdu_data.Rda", sep = ""))
 
