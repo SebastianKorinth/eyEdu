@@ -1,29 +1,52 @@
-EyEduImportBehavioralData <- function(raw.data.path,
-                                      selection = c(colnames(behav_dat))){
 
-  (file.list <- list.files(raw.data.path , pattern = "csv", recursive = F))
+EyEduImportBehavioralData <- function(var.selection = NULL){
+  
+# Exception handler
+  if (is.null(var.selection)){
+    return("There are no response variables defined yet. 
+           Please provide variable names for instance var.selection")
+    }  
 
-  behav_dat<- NULL
-  for(file in file.list){
-    jj <- read.csv(paste(raw.data.path, file, sep = ""), header = T)
-    fileName <- gsub(".csv", "", file)
-    jj$Participant <- factor(fileName)
-    jj$start <- NULL
-    jj$trial.index <- 1:nrow(jj)
-    jj$participant.nr <- jj$subject_nr
-    jj$participant.name <- jj$Participant
+load(paste(raw.data.path, "eyEdu_data.Rda", sep = ""))
+file.list <- list.files(raw.data.path , pattern = "*.csv", recursive = F)
 
-    # in case there is no dtplyr package - use plyr solution
-    behav_dat <- plyr::rbind.fill(behav_dat, jj)
+# Start file loop
+for(file.counter in 1: length(file.list)){
+response.data.temp <- read.csv(paste(raw.data.path, 
+                                     file.list[file.counter], sep = ""),
+                               stringsAsFactors=FALSE)
 
-    # Providing some feedback on processing progress.
-    print(paste("The file:", file, "has been imported successfully.", sep = " "))
-  }
-  # select important variables
-  # choose the variables your interested in, by default all are selected
-  behav_dat      <- subset(behav_dat, select = selection) #Make your selection
+participant.name <- gsub(".csv", "", file.list[file.counter])
+participant.name <- paste(participant.name, ".tsv", sep = "")
 
-  writeLines("All available files were imported and row-bound.\n Columns are matched by name, and any values that don't match will be filled with NA.")
-  #  print("Columns are matched by name, and any values that don't match will be filled with NA")
-  return(behav_dat)
+# Start loop for each variable name provided in var.selection
+var.index <- NULL
+for(var.counter in 1: length(var.selection)){
+  var.index.temp <- which(
+    colnames(response.data.temp) == var.selection[var.counter])
+  var.index <- c(var.index, var.index.temp)
 }
+
+# Reduces response data frame to variables provided in var.selection
+response.data.temp <- response.data.temp[,var.index]
+
+# Copies response data into trial info of participants 
+participant.index <- which(names(eyEdu.data$participants) == participant.name)
+eyEdu.data$participants[[participant.index]]$trial.info <- cbind(
+  eyEdu.data$participants[[participant.index]]$trial.info, response.data.temp)
+
+# Providing some feedback on progress.
+processed.file <- file.list[file.counter]
+print(paste("Importing response data for:",
+            processed.file, 
+            "- number", file.counter, 
+            "out of", 
+            length(file.list), sep = " ")) 
+} # End file loop
+save(eyEdu.data, file = paste(raw.data.path, "eyEdu_data.Rda", sep = ""))
+print("Done!")
+}
+
+
+
+
