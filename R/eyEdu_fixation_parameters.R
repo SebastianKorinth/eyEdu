@@ -15,7 +15,7 @@ EyEduFixationParameters <- function() {
   aoi.summary$pass.index <- 1
   aoi.summary$first.fix <- 0
   aoi.summary$refix <- 0
-  aoi.summary$skipped <-  0
+  aoi.summary$skip<-  0
   aoi.summary$never.fixated <- 0
   aoi.summary$never.fixated[is.na(aoi.summary$fixation.index)] <- 1
   aoi.summary$fixation.index[aoi.summary$never.fixated == 1] <- 0
@@ -53,7 +53,7 @@ EyEduFixationParameters <- function() {
     pass.index = numeric(),
     first.fix = numeric(),
     refix = numeric(),
-    skipped = numeric(),
+    skip = numeric(),
     regression.in = numeric(),
     regression.out = numeric(),
     stringsAsFactors = FALSE
@@ -147,7 +147,7 @@ EyEduFixationParameters <- function() {
          # max(temp.df$pass.index[temp.df$aoi.index == aoi.to.add])
          skipped.aoi$pass.index <- temp.df$pass.index[row.index] # this might indicate wrong pass
          skipped.aoi[, c(20:22)] <- 0
-         skipped.aoi$skipped <- 1
+         skipped.aoi$skip <- 1
          temp.df <- rbind(temp.df, skipped.aoi)
          rm(skipped.aoi)
        } # end loop for aois to add
@@ -234,6 +234,8 @@ regression.in <- aggregate(
   na.rm = T
 )
 colnames(regression.in)[4] <- "regression.in"
+regression.in$regression.in[regression.in$regression.in > 0] <- 1
+
 parameter.summary <- merge(parameter.summary,
                            regression.in,
                            by.x = c("Group.1", "Group.2", "Group.3"))
@@ -251,14 +253,14 @@ regression.out <- aggregate(
   na.rm = T
 ) 
 colnames(regression.out)[4] <- "regression.out"
+regression.out$regression.out[regression.out$regression.out > 0] <- 1
 parameter.summary <- merge(parameter.summary, regression.out, 
                            by.x = c("Group.1", "Group.2", "Group.3"))
 rm(regression.out)
 
 #### Gaze duration ####
 first.pass.subset <- subset(fixation.parameters,
-                            fixation.parameters$pass.index == 1)
-first.pass.subset$pass.index[first.pass.subset$never.fixated == 1] <- 0
+                            fixation.parameters$pass.index <= 1)
 
 gaze.duration <- aggregate(
   first.pass.subset$fix.duration,
@@ -292,6 +294,7 @@ first.pass.fixation.count <- aggregate(
   na.rm = T
 )
 colnames(first.pass.fixation.count)[4] <- "first.pass.fixation.count"
+
 parameter.summary <- merge(
   parameter.summary,
   first.pass.fixation.count,
@@ -299,26 +302,12 @@ parameter.summary <- merge(
   all.x = TRUE
 )
 rm(first.pass.fixation.count)
-
+rm(first.pass.subset)
 #### Skipping ####
-Skipped <- aggregate(
-  first.pass.subset$skipped,
-  by = list(
-    first.pass.subset$stimulus.id,    
-    first.pass.subset$aoi.index,
-    first.pass.subset$participant.name
-  ),
-  FUN = sum,
-  na.rm = T
-)
-colnames(Skipped)[4] <- "Skipped"
-parameter.summary <- merge(
-  parameter.summary,
-  Skipped,
-  by = c("Group.1", "Group.2", "Group.3"),
-  all.x = TRUE
-)
-rm(Skipped, first.pass.subset)
+
+parameter.summary$skip <- 0
+parameter.summary$skip[parameter.summary$first.pass.fixation.count == 0] <- 1
+
 
 #### First pass first fixation duration ####
 first.pass.subset.first <- subset(
@@ -434,8 +423,6 @@ parameter.summary <- merge (parameter.summary, temp.aoi,
 rm(temp.aoi, aoi.counter)               
 
 
-#### purly cosmetic. Needs fix for passes higher than 1 ####
-parameter.summary$Skipped[parameter.summary$Skipped > 1] <- 1
 
 save(fixation.parameters,
      file = paste(raw.data.path,
