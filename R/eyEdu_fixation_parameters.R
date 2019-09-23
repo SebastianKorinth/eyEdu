@@ -403,6 +403,9 @@ parameter.summary <- merge(
 )
 rm(pass.count)
 
+
+
+
 ##### 
 
 colnames(parameter.summary)[1:3] <- c("stimulus.id", "aoi.index", "participant.name")
@@ -420,7 +423,10 @@ temp.aoi$stimulus.id <- gsub("^.*_", "", temp.aoi$image.name)
 parameter.summary <- merge (parameter.summary, temp.aoi, 
                by = c("stimulus.id", "aoi.index"),
                all = T)
-rm(temp.aoi, aoi.counter)               
+rm(temp.aoi, aoi.counter)    
+
+# Quick fix especially for skips, need revision
+parameter.summary$pass.count[parameter.summary$pass.count == 0] <- 1
 
 
 
