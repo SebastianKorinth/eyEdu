@@ -65,7 +65,7 @@ EyEduFixationParameters <- function() {
     temp.df <- trial.subset[[trial.subset.index]]
     temp.df <-
       subset(temp.df, !is.na(temp.df$aoi.index)) # removes fixations without aoi
-    temp.df$pass.index[temp.df$never.fixated == 1] <- 0
+    # temp.df$pass.index[temp.df$never.fixated == 1] <- 0
     if (nrow(temp.df) <= 1) {
       next
     }
@@ -303,6 +303,8 @@ parameter.summary <- merge(
 )
 rm(first.pass.fixation.count)
 rm(first.pass.subset)
+parameter.summary$first.pass.fixation.count[is.na(parameter.summary$first.pass.fixation.count)] <- 0
+
 #### Skipping ####
 
 parameter.summary$skip <- 0
@@ -424,10 +426,6 @@ parameter.summary <- merge (parameter.summary, temp.aoi,
                by = c("stimulus.id", "aoi.index"),
                all = T)
 rm(temp.aoi, aoi.counter)    
-
-# Quick fix especially for skips, need revision
-parameter.summary$pass.count[parameter.summary$pass.count == 0] <- 1
-
 
 
 save(fixation.parameters,
