@@ -1,6 +1,6 @@
-import(png)
-import(ggplot2)
-import(grid)   
+library(png)
+library(ggplot2)
+library(grid)   
 
 load(paste(raw.data.path, "eyEdu_data.Rda", sep = ""))
 
