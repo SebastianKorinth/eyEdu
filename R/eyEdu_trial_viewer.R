@@ -9,5 +9,5 @@ eyEduTrialViewer  <- function() {
          call. = FALSE)
   }
   
-  shiny::runApp(appDir, display.mode = "normal", launch.browser = FALSE)
+  shiny::runApp(appDir, display.mode = "normal", launch.browser = TRUE)
 }
