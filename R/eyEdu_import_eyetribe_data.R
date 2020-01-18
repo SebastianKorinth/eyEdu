@@ -107,11 +107,24 @@ if (poi.end == "stop_trial") {
     message.data$message.2 == poi.end)]) + trial.info$start.message
   }
 
+if(
+  length(message.data$state[which(message.data$message.2 == "stimulus")]) < 1 
+){
+  trial.info$stimulus.message <- "empty" 
+} else {
+
 trial.info$stimulus.message <- gsub("var stimulus ", "", 
                                     message.data$state[which(
                                     message.data$message.2 == "stimulus")])
-trial.info$stimulus.id <- message.data$message.3[as.numeric(which(
-  message.data$message.2 == "stim_id"))]
+}
+
+if(length(message.data$message.3[as.numeric(which(message.data$message.2 == "stim_id"))]) < 1){
+  trial.info$stimulus.id <- 0
+} else {
+  trial.info$stimulus.id <- message.data$message.3[as.numeric(which(
+    message.data$message.2 == "stim_id"))]  
+}
+
 trial.info$trial.index <- 1:nrow(trial.info)
 trial.info$trial.duration <- trial.info$stop.message - trial.info$start.message
 
