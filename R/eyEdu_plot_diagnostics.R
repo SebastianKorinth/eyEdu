@@ -101,7 +101,7 @@ geom_rect(data=plot.fixation.df[1:end.point.fixation,], mapping=aes(
   xmax=plot.fixation.df$plot.fixation.stop.time[1:end.point.fixation], 
   ymin=0, ymax=max(plot.sample.df$plot.sample.posx[1:end.point.sample],
                    na.rm = TRUE) +20), 
-  color='grey', alpha=0.2) +
+  color='cornflowerblue', alpha=0.2) +
   
 labs(title = paste("participant #", 
                    eyEdu.data$participants[[
