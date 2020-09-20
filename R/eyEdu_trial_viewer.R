@@ -1,8 +1,7 @@
 # function to call the shiny app for free hand aoi definition
 
 eyEduTrialViewer  <- function() {
-  appDir <- system.file("shiny-examples", 
-                        "eyEduTrialViewer", 
+  appDir <- system.file("eyEduTrialViewer", 
                         package = "eyEdu")
   if (appDir == "") {
     stop("Could not find the eyEdu directory. Try re-installing eyEdu.", 

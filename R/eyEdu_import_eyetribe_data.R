@@ -142,12 +142,12 @@ cal.df$precision.x <- sapply(strsplit(as.character(cal.df$state),' '),"[",6)
 cal.df$precision.x <- gsub("X=", "", cal.df$precision.x)
 cal.df$precision.x <- as.numeric(gsub(",", "", cal.df$precision.x))
 cal.df <- cal.df[, c(2,31)]
-trial.info$qc.precision <- NA
+trial.info$qc.cali.precision <- NA
   
 for (calibration.counter in 1 : nrow(cal.df)){
   time.diff <- trial.info$start.message - cal.df$time[calibration.counter]
   prec.index <- which.min(abs(time.diff))
-  trial.info$qc.precision[prec.index : nrow(trial.info)] <- cal.df$precision.x[calibration.counter]
+  trial.info$qc.cali.precision[prec.index : nrow(trial.info)] <- cal.df$precision.x[calibration.counter]
   }
 
 

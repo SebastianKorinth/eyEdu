@@ -140,6 +140,10 @@ server <- function(input, output) {
         labs(x = NULL, y = NULL) + 
         theme(legend.position = "none", plot.margin = unit(c(0, 0, 0, 0), "in"))
     })
-  
+ ###############################################################################    
+# ends the app upon botton press  
+  observeEvent(input$ending, {
+    stopApp()
+  }) 
 
 }
