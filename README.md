@@ -45,6 +45,8 @@ EyEdu is not on CRAN, but the development version can be installed from GitHub u
   install.packages("devtools", dependencies = TRUE)}
   devtools::install_github("SebastianKorinth/eyEdu") 
 ```
+You might get the warning that you have to install Rtools, which is a software that builts binaries for your operating system.
+For Windows, for example, please go to http://cran.r-project.org/bin/windows/Rtools/, where you can download and install Rtools.
 
 ``` r
  library(eyEdu)
