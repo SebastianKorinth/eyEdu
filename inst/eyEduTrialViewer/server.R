@@ -146,4 +146,7 @@ server <- function(input, output) {
     stopApp()
   }) 
 
+# ends the session (in RStudio) if the browser tab is closed
+session$onSessionEnded(stopApp)
+
 }
