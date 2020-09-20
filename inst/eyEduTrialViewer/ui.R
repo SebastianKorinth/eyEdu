@@ -21,7 +21,7 @@ shinyUI(fluidPage(
     checkboxInput("checkbox.raw.r", "raw right", value = FALSE),
     checkboxInput("checkbox.raw.l", "raw left", value = FALSE),
     checkboxInput("checkbox.aoi", "aoi", value = TRUE),
-    actionButton("ending","Done")
+    actionButton("ending","Done"),
     width = 3
 
   ),
