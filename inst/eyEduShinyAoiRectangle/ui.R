@@ -12,6 +12,9 @@ shinyUI(fluidPage(
       actionButton("save.aoi.file", "Save AoI file"),
       actionButton("reset.aoi.file", "Reset"),
       tableOutput("aoi.table"),
+      br(),
+      br(),
+      actionButton("ending","Quit"),
       width = 4
 
   ),
@@ -31,7 +34,6 @@ shinyUI(fluidPage(
                                  clip = TRUE, 
                                  direction = c("xy", "x", "y"), 
                                  resetOnNew = TRUE)),
-    actionButton("ending","Done"),
     
     width = 8
   )

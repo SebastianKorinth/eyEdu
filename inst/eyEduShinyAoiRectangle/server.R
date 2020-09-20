@@ -1,5 +1,5 @@
 
-server <- function(input, output) {
+server <- function(input, output, session) {
   
 ############################################################################### 
 # sets up reactive dataframe
@@ -134,6 +134,8 @@ server <- function(input, output) {
   observeEvent(input$ending, {
     stopApp()
   })
-    
+ 
+# ends the session (in RStudio) if the browser tab is closed
+  session$onSessionEnded(stopApp)   
 
 }
