@@ -143,10 +143,10 @@ server <- function(input, output, session) {
  ###############################################################################    
 # ends the app upon botton press  
   observeEvent(input$ending, {
-    rm(eyEdu.data)
+
     stopApp()
   }) 
-
+    rm(eyEdu.data)
 # ends the session (in RStudio) if the browser tab is closed
 session$onSessionEnded(stopApp)
 
