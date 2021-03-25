@@ -143,6 +143,7 @@ server <- function(input, output, session) {
  ###############################################################################    
 # ends the app upon botton press  
   observeEvent(input$ending, {
+    rm(eyEdu.data)
     stopApp()
   }) 
 
