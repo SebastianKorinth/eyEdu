@@ -148,7 +148,13 @@ server <- function(input, output, session) {
   }) 
 
 # ends the session (in RStudio) if the browser tab is closed
-session$onSessionEnded(rm(eyEdu.data))
-session$onSessionEnded(stopApp)
+
+session$onSessionEnded(function() {
+
+    rm(eyEdu.data)
+
+  })
+
+#session$onSessionEnded(stopApp)
 
 }
