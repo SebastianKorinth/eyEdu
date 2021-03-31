@@ -1,8 +1,10 @@
 
 EyEduDefineWordAois <- function(line.margin = 26,
                                character.space.width = 10,
-                               inter.word.adjust = 5,
-                               sparse.aoi.definition = T){
+                               inter.word.adjust = 4,
+                               sparse.aoi.definition = T,
+                               grey.factor = 0.5,
+                               rtl = TRUE){
 
 load(paste(raw.data.path, "eyEdu_data.Rda", sep = ""))
 
@@ -34,6 +36,11 @@ text.image <- readPNG(paste(inpath, file.names[file.counter], sep="/"))
 
 # Reduces the three matrices (RGB) to one mean matrix
 text.image <- (text.image[,,1] + text.image[,,2] + text.image[,,3])/3
+# Shifts image matrix by the value provided through grey.factor
+# for cases in which the difference between a grey background and black font
+# color is too small
+text.image <- text.image * grey.factor
+
 # Rounds to only 1 = background and 0 = black values 
 text.image <- round(text.image) 
 # Inverse matrix now 0 = background, 1 = text
@@ -67,11 +74,12 @@ rm(shift.vector, line.vector)
 # Initiates an empty data frame for the AoI information
 aoi.info <- data.frame (image.name = character(), 
                         line.number = numeric(), 
-                        line.aoi.index = numeric, 
-                        x.left = numeric,
-                        x.right = numeric,
-                        y.top = numeric,
-                        y.bottom = numeric)
+                        line.aoi.index = numeric(), 
+                        x.left = numeric(),
+                        x.right = numeric(),
+                        y.top = numeric(),
+                        y.bottom = numeric(),
+                        stringsAsFactors = FALSE)
 
 # Loop that searches for word borders in each line starts here    
 for(line.counter in 1 : length(upper.line.limits)){ 
@@ -161,6 +169,18 @@ line.aoi$image.name <- gsub(".png", "",file.names[file.counter])
 # Addes the aoi info for a line to the complete aoi.info data frame for
 # an image
 aoi.info <- rbind(aoi.info, line.aoi)
+
+############### Right to left ##############################
+
+# if rtl true, 
+if(rtl == TRUE){
+  # experimental text image is reversed and transposed
+  # text.image <- t(apply(t(text.image), 2, rev)) 
+  
+  # reverse order of aoi index 
+  aoi.info$line.aoi.index <- rev(aoi.info$line.aoi.index)
+}
+
 }
 
 # Adds an aoi.index for complete text (relevant for multi-line texts only)
