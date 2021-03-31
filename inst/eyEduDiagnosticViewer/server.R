@@ -175,16 +175,17 @@ server <- function(input, output, session) {
       })
 
   ###############################################################################
-  # ends the app upon botton press
+  # ends the session upon botton press
   observeEvent(input$ending, {
-
-    stopApp()
+    session$close()
   })
-
-  # removes eyEdu.data and scale.var from the global environment
+  
+  # ends the session (in RStudio) if the browser tab is closed
+  # removes variables from global environment
   session$onSessionEnded(function() {
     objs <- ls(pos = ".GlobalEnv")
     rm(list = objs[grep("eyEdu.data", objs)], pos = ".GlobalEnv")
     rm(list = objs[grep("scale.var", objs)], pos = ".GlobalEnv")
+    stopApp()
   })
 }
