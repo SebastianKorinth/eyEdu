@@ -181,5 +181,10 @@ server <- function(input, output) {
     stopApp()
   })
 
-  # ends the session (in RStudio) if the browser tab is closed
+  # removes eyEdu.data and scale.var from the global environment
+  session$onSessionEnded(function() {
+    objs <- ls(pos = ".GlobalEnv")
+    rm(list = objs[grep("eyEdu.data", objs)], pos = ".GlobalEnv")
+    rm(list = objs[grep("scale.var", objs)], pos = ".GlobalEnv")
+  })
 }
