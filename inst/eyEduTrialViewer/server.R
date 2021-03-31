@@ -140,21 +140,22 @@ server <- function(input, output, session) {
         labs(x = NULL, y = NULL) + 
         theme(legend.position = "none", plot.margin = unit(c(0, 0, 0, 0), "in"))
     })
- ###############################################################################    
-# ends the app upon botton press  
+  ###############################################################################    
+  # # ends the app upon botton press
   observeEvent(input$ending, {
-
-    stopApp()
-  }) 
-
-# ends the session (in RStudio) if the browser tab is closed
-
-session$onSessionEnded(function() {
-
-    rm(eyEdu.data)
-
+    session$close()
   })
-
-#session$onSessionEnded(stopApp)
+  
+  # ends the session (in RStudio) if the browser tab is closed
+  # removes variables from global env
+  session$onSessionEnded(function() {
+    objs <- ls(pos = ".GlobalEnv")
+    rm(list = objs[grep("eyEdu.data", objs)], pos = ".GlobalEnv")
+    rm(list = objs[grep("scale.var", objs)], pos = ".GlobalEnv")
+    rm(list = objs[grep("initial.background.file", objs)], pos = ".GlobalEnv")
+    rm(list = objs[grep("page.width", objs)], pos = ".GlobalEnv")
+    rm(list = objs[grep("page.height", objs)], pos = ".GlobalEnv")
+    stopApp()
+  })
 
 }
