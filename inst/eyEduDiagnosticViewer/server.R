@@ -1,5 +1,5 @@
 
-server <- function(input, output) {
+server <- function(input, output, session) {
 
   # subset samples participant and trial
   trial.samples.fn <-
