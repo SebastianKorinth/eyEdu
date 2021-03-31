@@ -19,8 +19,7 @@ shinyUI(fluidPage(
     checkboxInput("checkbox.y", "show y axis", value = TRUE),  
     checkboxInput("checkbox.raw", "show raw data", value = TRUE),
     checkboxInput("checkbox.filt", "show filtered data", value = FALSE),
-    actionButton("ending","Quit"),
-
+    
     width = 4
 
 
