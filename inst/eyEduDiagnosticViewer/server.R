@@ -175,6 +175,11 @@ server <- function(input, output, session) {
       })
 
   ###############################################################################
+  # ends the app upon botton press
+  observeEvent(input$ending, {
+
+    stopApp()
+  })
 
   # removes eyEdu.data and scale.var from the global environment
   session$onSessionEnded(function() {
