@@ -2,7 +2,7 @@
 
 EyEduTrialViewer  <- function(aoi.names.screenshot = FALSE) {
 
-	assign('aoi.names.screenshot', aoi.names.screenshot, envir = .GlobalEnv)
+	assign(aoi.names.screenshot, aoi.names.screenshot, envir = .GlobalEnv)
   	appDir <- system.file("eyEduTrialViewer", package = "eyEdu")
   
   if (appDir == "") {
