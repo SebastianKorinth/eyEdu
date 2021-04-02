@@ -62,15 +62,24 @@ server <- function(input, output, session) {
 
   ########## aoi sets ############
   trial.aoi.fn <- reactive({
-  
+    
     stimulus.id <- eyEdu.data$participants[[
       input$participant.name]]$trial.info$stimulus.id[input$trial.number] 
     
-    # Generates name for relevant aoi file
-    trial.aoi.index <- grep(paste("*_", stimulus.id,".png", sep =""), 
-                      names(eyEdu.data$aoi.info))[1]
-    # Extracts relevant aoi.info
-    trial.aoi <- eyEdu.data$aoi.info[[trial.aoi.index]]
+    
+    if(aoi.names.screenshot == FALSE) {
+      aoi.stimulus.message <- eyEdu.data$participants[[
+        input$participant.name]]$trial.info$stimulus.message[input$trial.number] 
+      aoi.stimulus.message <- paste(aoi.stimulus.message,".png", sep ="")
+      print(aoi.stimulus.message)
+      trial.aoi <- eyEdu.data$aoi.info[[aoi.stimulus.message]]
+    } else {
+      # Generates name for relevant aoi file
+      trial.aoi.index <- grep(paste("*_", stimulus.id,".png", sep =""), 
+                              names(eyEdu.data$aoi.info))[1]
+      # Extracts relevant aoi.info
+      trial.aoi <- eyEdu.data$aoi.info[[trial.aoi.index]]}
+    
     if(is.null(trial.aoi)){
       trial.aoi <- data.frame(line.aoi.index = 0,
                               x.left = 0,
@@ -79,7 +88,8 @@ server <- function(input, output, session) {
                               y.bottom = 0,
                               line.number = 0,
                               image.name = NA,
-                              aoi.index =0)}
+                              aoi.index =0)
+    }
     
 
     return(trial.aoi)
