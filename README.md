@@ -7,6 +7,19 @@ EyEdu (pronounced "I do!") is not intended to replace existing or commercial sof
 The package provides basic functions to import raw eye-tracking data (currently only for EyeTribe), to visualize data, to conduct fixation detection, to create or import area of interest definitions and [several additional functions](#list-of-functions).
 Example experiments including real eye movement data can be downloaded and used to run some first analyses (aka playing around). This package is obviously incomplete, full of bugs and might change a lot in the future. If you think that you can make it better, join the team!
 
+
+### April 2021 +++ NEW +++ NEW +++ NEW +++ NEW +++
+
+DiagnosticViewer is a shiny app that allows browsing through diagnostic plots.
+
+``` r
+
+EyEduDiagnosticViewer()
+
+```
+![](README_files/figure-markdown_github/eyEdu-diagnostic-viewer.png)
+
+
 ### March 2021 +++ NEW +++ NEW +++ NEW +++ NEW +++
 
 EyEdu has now a plot function for heat maps, that is, you can combine the fixation data of several participants (or only one) looking at the same stimulus by providing a list of participant numbers or names. 
