@@ -9,5 +9,5 @@ initial.background.file <- readPNG((paste(raw.data.path,"images/", initial.backg
 page.width <- dim(initial.background.file)[2]
 page.height <- dim(initial.background.file)[1]
 scale.var = 0.55
-#aoi.names.screenshot = T
+aoi.names.screenshot = aoi.names.screenshot
 
