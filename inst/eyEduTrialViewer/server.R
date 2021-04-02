@@ -165,6 +165,7 @@ server <- function(input, output, session) {
     rm(list = objs[grep("initial.background.file", objs)], pos = ".GlobalEnv")
     rm(list = objs[grep("page.width", objs)], pos = ".GlobalEnv")
     rm(list = objs[grep("page.height", objs)], pos = ".GlobalEnv")
+    rm(list = objs[grep("aoi.names.screenshot", objs)], pos = ".GlobalEnv")
     stopApp()
   })
 
