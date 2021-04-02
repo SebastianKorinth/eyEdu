@@ -2,7 +2,7 @@
 
 shinyUI(fluidPage(
   # title    
-  headerPanel("eyEduViewer"),  
+  headerPanel("eyEduTrialViewer"),  
 
   # side bar  
   sidebarPanel(

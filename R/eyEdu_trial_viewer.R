@@ -1,6 +1,6 @@
 # function to call the shiny app for free hand aoi definition
 
-EyEduTrialViewer  <- function() {
+EyEduTrialViewer  <- function(aoi.names.screenshot = FALSE) {
   appDir <- system.file("eyEduTrialViewer", 
                         package = "eyEdu")
   if (appDir == "") {
