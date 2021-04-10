@@ -1,9 +1,11 @@
-# function to call the shiny app for free hand aoi definition
-
-EyEduTrialViewer  <- function(aoi.names.screenshot = FALSE) {
-
-	assign("aoi.names.screenshot", aoi.names.screenshot, envir = .GlobalEnv)
-  	appDir <- system.file("eyEduTrialViewer", package = "eyEdu")
+EyEduTrialViewer  <- function(aoi.names.screenshot = TRUE,
+                              aoi.color = "red",
+                              scale.var = 0.55) {
+  
+  assign("aoi.names.screenshot", aoi.names.screenshot, envir = .GlobalEnv)
+  assign("aoi.color", aoi.color, envir = .GlobalEnv)
+  assign("scale.var", scale.var, envir = .GlobalEnv)
+  appDir <- system.file("eyEduTrialViewer", package = "eyEdu")
   
   if (appDir == "") {
     stop("Could not find the eyEdu directory. Try re-installing eyEdu.", 
