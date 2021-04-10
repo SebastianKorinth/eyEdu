@@ -20,13 +20,15 @@ server <- function(input, output, session) {
         if (is.null(plot.sample.posx.filt)){
           plot.sample.posx.filt <- 0
         }
-        if (is.null(plot.sample.posy.filt)){
-          plot.sample.posy.filt <- 0
-        }
+
 
         plot.sample.posy.filt <- eyEdu.data$participants[[
           input$participant.name]]$sample.data$y.filt[eyEdu.data$participants[[
             input$participant.name]]$sample.data$trial.index == input$trial.number]
+        
+        if (is.null(plot.sample.posy.filt)){
+          plot.sample.posy.filt <- 0
+        }
 
 
       # Extracts time line data for participant.nr and trial.nr
