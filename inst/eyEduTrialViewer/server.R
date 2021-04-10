@@ -113,7 +113,7 @@ server <- function(input, output, session) {
     else{raw..val <- 0} }) 
   show.fix.fn <- reactive({if(input$checkbox.fix == TRUE){fix.val <- 0.5}
     else{fix.val <- 0} }) 
-  show.aoi.fn <- reactive({if(input$checkbox.aoi == TRUE){aoi.val <- "black"}
+  show.aoi.fn <- reactive({if(input$checkbox.aoi == TRUE){aoi.val <- aoi.color}
     else{aoi.val <- NA} }) 
 
 
