@@ -62,7 +62,7 @@ eye.mov.data$Lrawy <- 0
 # Fixes rowname order for indexing.
 row.names(eye.mov.data) <- 1: nrow(eye.mov.data)
 
-raw.data <- read.csv(paste(raw.data.path,"/edfData/", raw.file.list[file.counter],
+raw.data <- read.csv(paste(raw.data.path,asc.path, raw.file.list[file.counter],
                            sep = ""),sep=" ", header = F, encoding = "UTF-8",
                      strip.white=T, stringsAsFactors=FALSE)
 colnames(raw.data)[1] <- "time"
@@ -179,7 +179,7 @@ eye.mov.data <- subset(eye.mov.data, eye.mov.data$trial.index > 0)
 
 
 #### Extra import fixations
-raw.data <- read.csv(paste(raw.data.path,"/edfData/", raw.file.list[file.counter],
+raw.data <- read.csv(paste(raw.data.path,asc.path, raw.file.list[file.counter],
                            sep = ""),sep="", header = F, encoding = "UTF-8",
                      strip.white=T, stringsAsFactors=FALSE)
 colnames(raw.data)[1] <- "temp"
