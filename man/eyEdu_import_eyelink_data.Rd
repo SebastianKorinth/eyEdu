@@ -33,13 +33,7 @@ EyEduImportEyeLinkData(poi.start = ...,
 
 \details{
 %%  ~~ If necessary, more details than the description above ~~
-A message dictionary that allows several periods of interest per trial should provide first a label for the whole trial (e.g., "trial" followed by a start and a stop message defining the whole trial period). The trial can be further subdivided into shorter pois. Again the user will have to provide a label as well as start and stop messages per poi.
-
-Example:
-my.messages <- list(trial = c("start_trial","stop_trial"),
-                    sentence = c("start_sentence","stop_sentence"),
-                    question = c("start_question", "stop_question"))
-
+A message dictionary that allows several periods of interest per trial should provide first a label for the whole trial (e.g., "trial" followed by a start and a stop message defining the whole trial period). The trial can be further subdivided into shorter pois. Again the user will have to provide a label as well as start and stop messages per poi. See example section.
 
 }
 \value{
@@ -70,6 +64,10 @@ Sebastian Korinth
 \examples{
 
 # Example for an import of data that will be subdivided into periods of interest defined in "my.messages"
+my.messages <- list(trial = c("start_trial","stop_trial"),
+                    sentence = c("start_sentence","stop_sentence"),
+                    question = c("start_question", "stop_question"))
+
 EyEduImportEyeLinkData(message.dict = my.messages,
                        asc.path = "edfData/",
                        remove.outliers = T)
