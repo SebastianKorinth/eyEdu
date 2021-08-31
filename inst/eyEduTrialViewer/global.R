@@ -8,6 +8,10 @@ initial.background.file <- list.files(paste(raw.data.path,"images/", sep = ""))[
 initial.background.file <- readPNG((paste(raw.data.path,"images/", initial.background.file, sep = "")))
 page.width <- dim(initial.background.file)[2]
 page.height <- dim(initial.background.file)[1]
-#scale.var = 0.55
-#aoi.names.screenshot <<- aoi.names.screenshot
 
+
+### provided by function that calls the Shiny app
+# scale.var = 0.55
+# aoi.color = "red"
+# aoi.names.screenshot = T
+# fix.size.scale = 10

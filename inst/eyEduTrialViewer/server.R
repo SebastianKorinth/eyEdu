@@ -19,15 +19,21 @@ server <- function(input, output, session) {
     
   })
   
-  # subset participant and trial
+  # subset sample data for participant and trial (and poi)
   trial.samples.fn <-
     reactive({
-      subset(eyEdu.data$participants[[input$participant.name]]$sample.data,
+      trial.samples <- subset(eyEdu.data$participants[[input$participant.name]]$sample.data,
              trial.index == input$trial.number)
+      
+      if(input$poi.name != "trial"){
+        trial.samples <- subset(trial.samples, poi == input$poi.name)
+      }
+      
+      return(trial.samples)
     })
   
 
-  ### subset fixations (by participant and trial index)
+  ### subset fixations by participant and trial index (and poi))
   trial.fixaxtions.fn <- reactive({
     if (is.null(eyEdu.data$participants[[input$participant.name]]$fixation.data)) {
       trial.fixations <- data.frame(
@@ -49,6 +55,10 @@ server <- function(input, output, session) {
       )
     }
     
+    if(input$poi.name != "trial"){
+      trial.fixations <- subset(trial.fixations, poi == input$poi.name)
+    }
+    return(trial.fixations)
   })
     
   output$interaction_numericInput <- renderUI({
@@ -138,8 +148,9 @@ server <- function(input, output, session) {
                   colour = "red", alpha = show.raw.r.fn(), na.rm=TRUE) + 
         geom_point(aes(trial.fixaxtions.fn()$fix.pos.x,
                        trial.fixaxtions.fn()$fix.pos.y,
-                       size = trial.fixaxtions.fn()$fix.duration), 
+                       size = trial.fixaxtions.fn()$fix.dur), 
                    colour = "green", alpha = show.fix.fn(), na.rm=TRUE) + 
+        scale_size_continuous(range = c(1, fix.size.scale)) +
         geom_rect(aes(xmin = trial.aoi.fn()$x.left,
                       xmax = trial.aoi.fn()$x.right,
                       ymin = trial.aoi.fn()$y.bottom,
@@ -162,6 +173,8 @@ server <- function(input, output, session) {
     objs <- ls(pos = ".GlobalEnv")
     rm(list = objs[grep("eyEdu.data", objs)], pos = ".GlobalEnv")
     rm(list = objs[grep("scale.var", objs)], pos = ".GlobalEnv")
+    rm(list = objs[grep("fix.size.scale", objs)], pos = ".GlobalEnv")
+    rm(list = objs[grep("aoi.color", objs)], pos = ".GlobalEnv")
     rm(list = objs[grep("initial.background.file", objs)], pos = ".GlobalEnv")
     rm(list = objs[grep("page.width", objs)], pos = ".GlobalEnv")
     rm(list = objs[grep("page.height", objs)], pos = ".GlobalEnv")
