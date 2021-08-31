@@ -19,5 +19,14 @@ file.remove("example.zip")
     file.remove("example.zip")
     
   }
+  if(experiment.type == "readEyeLink"){
+    - 
+    download.file( url = "https://github.com/SPKorinth/EyeLinkPsychoPyExample/archive/refs/heads/main.zip",
+                   destfile = "example.zip")
+    
+    unzip( zipfile = "example.zip" )
+    file.remove("example.zip")
+    
+  }
   
 }
