@@ -1,4 +1,4 @@
-EyEduedf2asc <- function(app.path = NA,
+EyEduEdf2asc <- function(app.path = NA,
                          edf.path = NA,
                          asc.path = NA,
                          add.options = NA) {
