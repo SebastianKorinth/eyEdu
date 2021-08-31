@@ -1,5 +1,5 @@
-\name{EyEduedf2asc}
-\alias{EyEduedf2asc}
+\name{EyEduEdf2asc}
+\alias{EyEduEdf2asc}
 
 \title{
 Converting SR-Research edf-files into asci file format
@@ -18,14 +18,16 @@ EyEduedf2asc(app.path = ...,
 }
 
 \arguments{
-  \item{"..."}{
-app.path = ...,  character string, providing the path to the directory where SR-Research's edf2asc program has been installed
-edf.path = character string, providing the path to the directory, where the edf files are stored
-asc.path = character string, providing the path to the directory, where the converted ascii files should be saved to
-add.options = ..., there is a long list of additional options that can be looked up at SR-Research's support forum (e.g., "-l" ouput data only for left eye)
+  \item{"app.path"}{character string, providing the path to the directory where SR-Research's edf2asc program has been installed}
+  
+  \item{"edf.path"}{character string, providing the path to the directory, where the edf files are stored}
+  
+  \item{"asc.path"}{character string, providing the path to the directory, where the converted ascii files should be saved to}
+
+  \item{"add.options"}{there is a long list of additional options that can be looked up at SR-Research's support forum (e.g., "-l" ouput data only for left eye)}
 
 }
-}
+
 \details{
 %%  ~~ If necessary, more details than the description above ~~
 }
