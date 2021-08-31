@@ -1,4 +1,3 @@
-
 EyEduPlotTrial <- function(participant.nr = NA, 
                           trial.nr = NA,
                           participant.name = NA,
@@ -9,7 +8,9 @@ EyEduPlotTrial <- function(participant.nr = NA,
                           sample.color = "darkviolet",
                           show.filtered = FALSE,
                           sparse.aoi.definition = TRUE,
-                          aoi.names.screenshot = TRUE){
+                          poi.name = NA,
+                          aoi.names.screenshot = TRUE,
+                          fix.size.scale = 4){
 
 # checks if eyEdu.data is loaded already, if not will be loaded
   if(!exists("eyEdu.data")) {
@@ -40,6 +41,9 @@ trial.samples <- subset(eyEdu.data$participants[[list.entry.nr]]$sample.data,
                             list.entry.nr]]$sample.data$trial.index 
                         == trial.nr)
 
+if(!is.na(poi.name)){
+  trial.samples <- subset(trial.samples, poi == poi.name)
+ }
 
 ############# fixations #################
 # Extractes relevant fixations if fixation detection was conducted; if not,
@@ -48,7 +52,7 @@ trial.samples <- subset(eyEdu.data$participants[[list.entry.nr]]$sample.data,
 if (is.null(eyEdu.data$participants[[list.entry.nr]]$fixation.data)) {
   trial.fixations <- data.frame(fix.start = 0,
                                 fix.end = 0,
-                                fix.duration = 0,
+                                fix.dur = 0,
                                 fix.pos.x = -100,
                                 fix.pos.y = -1000,
                                 fixation.index = 0,
@@ -60,6 +64,11 @@ if (is.null(eyEdu.data$participants[[list.entry.nr]]$fixation.data)) {
     list.entry.nr]]$fixation.data, eyEdu.data$participants[[
       list.entry.nr]]$fixation.data$trial.index == trial.nr)
 }
+
+if(!is.na(poi.name)){
+  trial.fixations <- subset(trial.fixations, poi == poi.name)
+}
+
 
 ########## aoi sets ############
 if(aoi.names.screenshot == F) {
@@ -178,8 +187,9 @@ trial.plot <- ggplot(trial.samples) +
            colour = sample.color, alpha = 1, na.rm=TRUE) + 
  geom_point(data = trial.fixations, aes(trial.fixations$fix.pos.x,
                                         trial.fixations$fix.pos.y, 
-                                        size = trial.fixations$fix.duration), 
+                                        size = trial.fixations$fix.dur), 
             colour = fix.color, alpha = 0.5, na.rm=TRUE) + 
+ scale_size_continuous(range = c(1, fix.size.scale)) +
  coord_fixed(ratio = 1) +  
  labs(x = NULL, y = NULL) + 
  theme(legend.position = "none", plot.margin = unit(c(0, 0, 0, 0), "in")) +
@@ -222,8 +232,9 @@ trial.plot <- ggplot(trial.samples) +
            colour = sample.color, alpha = 1, na.rm=TRUE) + 
  geom_point(data = trial.fixations, aes(trial.fixations$fix.pos.x,
                                         trial.fixations$fix.pos.y, 
-                                        size = trial.fixations$fix.duration), 
+                                        size = trial.fixations$fix.dur), 
             colour = fix.color, alpha = 0.5, na.rm=TRUE) + 
+ scale_size_continuous(range = c(1, fix.size.scale)) +
  coord_fixed(ratio = 1) +  
  labs(x = NULL, y = NULL) + 
  theme(legend.position = "none", plot.margin = unit(c(0, 0, 0, 0), "in")) +
