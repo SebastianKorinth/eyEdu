@@ -6,7 +6,7 @@ EyEduTrialViewer  <- function(aoi.names.screenshot = TRUE,
   assign("aoi.names.screenshot", aoi.names.screenshot, envir = .GlobalEnv)
   assign("aoi.color", aoi.color, envir = .GlobalEnv)
   assign("scale.var", scale.var, envir = .GlobalEnv)
-  assign("fix.size.scale = 10", scale.var, envir = .GlobalEnv)
+  assign("fix.size.scale", fix.size.scale, envir = .GlobalEnv)
   
   appDir <- system.file("eyEduTrialViewer", package = "eyEdu")
   
