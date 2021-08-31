@@ -174,20 +174,20 @@ trial.plot <- ggplot(trial.samples) +
                    xmax = page.width, 
                    ymin = 0, 
                    ymax = -1 * page.height) + 
- geom_rect(trial.aoi, mapping = aes(xmin = trial.aoi$x.left, 
-                                    xmax = trial.aoi$x.right, 
-                                    ymin = trial.aoi$y.bottom, 
-                                    ymax = trial.aoi$y.top, 
+ geom_rect(trial.aoi, mapping = aes(xmin = x.left, 
+                                    xmax = x.right, 
+                                    ymin = y.bottom, 
+                                    ymax = y.top, 
                                     fill = F), color = aoi.color, alpha = 0) +
- geom_path(data = trial.samples, aes(trial.samples$Lrawx,trial.samples$Lrawy), 
+ geom_path(data = trial.samples, aes(Lrawx,Lrawy), 
         colour = sample.color.l, alpha = 1, na.rm=TRUE) +
- geom_path(data = trial.samples, aes(trial.samples$Rrawx,trial.samples$Rrawy), 
+ geom_path(data = trial.samples, aes(Rrawx,Rrawy), 
            colour = sample.color.r, alpha = 1, na.rm=TRUE) + 
- geom_path(data = trial.samples, aes(trial.samples$rawx,trial.samples$rawy), 
+ geom_path(data = trial.samples, aes(rawx,rawy), 
            colour = sample.color, alpha = 1, na.rm=TRUE) + 
- geom_point(data = trial.fixations, aes(trial.fixations$fix.pos.x,
-                                        trial.fixations$fix.pos.y, 
-                                        size = trial.fixations$fix.dur), 
+ geom_point(data = trial.fixations, aes(fix.pos.x,
+                                        fix.pos.y, 
+                                        size = fix.dur), 
             colour = fix.color, alpha = 0.5, na.rm=TRUE) + 
  scale_size_continuous(range = c(1, fix.size.scale)) +
  coord_fixed(ratio = 1) +  
@@ -219,20 +219,20 @@ trial.plot <- ggplot(trial.samples) +
                    xmax = page.width, 
                    ymin = 0, 
                    ymax = -1 * page.height) + 
- geom_rect(trial.aoi, mapping = aes(xmin = trial.aoi$x.left, 
-                                    xmax = trial.aoi$x.right, 
-                                    ymin = trial.aoi$y.bottom, 
-                                    ymax = trial.aoi$y.top, fill = F), 
+ geom_rect(trial.aoi, mapping = aes(xmin = x.left, 
+                                    xmax = x.right, 
+                                    ymin = y.bottom, 
+                                    ymax = y.top, fill = F), 
            color = aoi.color, alpha = 0) +
- geom_path(data = trial.samples, aes(trial.samples$L.x.filt,trial.samples$L.y.filt), 
+ geom_path(data = trial.samples, aes(L.x.filt,L.y.filt), 
             colour = sample.color.l, alpha = 1, na.rm=TRUE) + 
- geom_path(data = trial.samples, aes(trial.samples$R.x.filt,trial.samples$R.y.filt), 
+ geom_path(data = trial.samples, aes(R.x.filt,R.y.filt), 
             colour = sample.color.r, alpha = 1, na.rm=TRUE) + 
- geom_path(data = trial.samples, aes(trial.samples$x.filt,trial.samples$y.filt), 
+ geom_path(data = trial.samples, aes(x.filt,y.filt), 
            colour = sample.color, alpha = 1, na.rm=TRUE) + 
- geom_point(data = trial.fixations, aes(trial.fixations$fix.pos.x,
-                                        trial.fixations$fix.pos.y, 
-                                        size = trial.fixations$fix.dur), 
+ geom_point(data = trial.fixations, aes(fix.pos.x,
+                                        fix.pos.y, 
+                                        size = fix.dur), 
             colour = fix.color, alpha = 0.5, na.rm=TRUE) + 
  scale_size_continuous(range = c(1, fix.size.scale)) +
  coord_fixed(ratio = 1) +  
