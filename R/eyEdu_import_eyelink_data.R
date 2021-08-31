@@ -249,8 +249,9 @@ header.info[1,2] <- participant.nr
 header.info[1,3] <- as.numeric(message.data$message.4[which(
   message.data$message.1 == "!MODE")[1]])
 
-header.info[1,4] <- as.numeric(message.data$message.5[which(message.data$message.1 == "DISPLAY_COORDS")])
-header.info[1,5] <- as.numeric(message.data$message.6[which(message.data$message.1 == "DISPLAY_COORDS")])
+# The display dimension are set for python (start counting a 0), hence, a 1 is added 
+header.info[1,4] <- as.numeric(message.data$message.5[which(message.data$message.1 == "DISPLAY_COORDS")]) + 1
+header.info[1,5] <- as.numeric(message.data$message.6[which(message.data$message.1 == "DISPLAY_COORDS")]) + 1
 
 # header.info[1,6] <- as.character((message.data$message.3[which(
 #   message.data$message.2 == "datetime")])[1])
