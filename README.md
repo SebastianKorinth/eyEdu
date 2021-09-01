@@ -8,12 +8,45 @@ The package provides basic functions to import raw eye-tracking data (currently 
 Example experiments including real eye movement data can be downloaded and used to run some first analyses (aka playing around). This package is obviously incomplete, full of bugs and might change a lot in the future. If you think that you can make it better, join the team!
 
 
+
+### September 2021 +++ NEW +++ NEW +++ NEW +++ NEW +++
+
+Although rather experimental, eyEdu can now also import and visualize data collected with SR-Research EyeLink equipment.  
+Just look, how smooth the raw data are. How beautiful fixations were detected. I really like low-cost eye-tracker, but the EyeLinks are another league. ♡
+
+![](README_files/figure-markdown_github/eyEdu-dianostic-viewer-eyelink.png)
+
+EyeLink example data can be downloaded using:
+
+``` r
+EyEduGetExamples(experiment.type = "readEyeLink")
+
+```
+
+A function is added that makes file conversion (EyeLink's edf to ascii files) convenient. 
+
+``` r
+EyEduEdf2asc(app.path = ...,
+				edf.path = ...,
+				asc.path = ...,
+				add.options = ...)
+
+# Documentation for this function can be called via
+?EyEduEdf2asc()
+
+```
+
+Trial plots (single plots and the Shiny App) can - currently only for EyeLink data - visualize periods of interest.
+
+![](README_files/figure-markdown_github/eyEdu-trial-viewer-poi.png)
+
+
+
 ### April 2021 +++ NEW +++ NEW +++ NEW +++ NEW +++
 
 DiagnosticViewer is a shiny app that allows browsing through diagnostic plots.
 
 ``` r
-
 EyEduDiagnosticViewer()
 
 ```
@@ -25,7 +58,6 @@ EyEduDiagnosticViewer()
 EyEdu has now a plot function for heat maps, that is, you can combine the fixation data of several participants (or only one) looking at the same stimulus by providing a list of participant numbers or names. 
 
 ``` r
-
 EyEduPlotHeat(participant.nr.list = c(1,2,3,4,5), trial.id = 13, alpha.var = 0.7)
 
 ### OR
