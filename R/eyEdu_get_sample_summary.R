@@ -21,7 +21,13 @@ for (participant.counter in 1:length(eyEdu.data$participants)) {
   else{
     sample.summary <- rbind(sample.summary,sample.df)
   }
-  
+  # Providing some feedback on processing progress.
+  processed.participant <- names(eyEdu.data$participants[participant.counter])
+  print(paste("Adding data of:",
+              processed.participant, "to sample summary", 
+              "- number", participant.counter, 
+              "out of", 
+              max(length(eyEdu.data$participants)), sep = " ")) 
   
 }
 save(sample.summary, file = paste(raw.data.path, "sample_summary.Rda",
