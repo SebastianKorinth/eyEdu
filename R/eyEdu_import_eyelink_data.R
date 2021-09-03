@@ -2,6 +2,7 @@ EyEduImportEyeLinkData <- function(poi.start = NA,
                               poi.end = NA,
                               asc.path = NA,
                               message.dict = NA,
+                              participant.id.var ="subject_nr",
                               remove.outliers = TRUE,
                               python.correction = FALSE,
                               eye.sides = "R"){
@@ -141,10 +142,12 @@ temp.message <- message.data[which(message.data$message.1 == "stimulus"), 3:ncol
 #   trial.info$stimulus.message <-trimws(trial.info$stimulus.message,which = "right")  
 # }
 
-trial.info$stimulus.id <- as.numeric(message.data$message.2[which(
-  message.data$message.1 == poi.start)])
+# trial.info$stimulus.id <- as.numeric(message.data$message.2[which(
+#   message.data$message.1 == poi.start)])
 
-participant.nr <- as.numeric(message.data$message.2[which(message.data$message.1 == "subject_nr")][1])
+trial.info$stimulus.id <- trial.info$trial.index
+
+participant.nr <- message.data$message.2[which(message.data$message.1 == participant.id.var)][1]
 
 trial.info$background.image <- paste(participant.nr, "_", 
                                      trial.info$trial.index - py.cor.var,
@@ -267,8 +270,8 @@ header.info[1,3] <- as.numeric(message.data$message.4[which(
   message.data$message.1 == "!MODE")[1]])
 
 # The display dimension are set for python (start counting a 0), hence, a 1 is added 
-header.info[1,4] <- as.numeric(message.data$message.5[which(message.data$message.1 == "DISPLAY_COORDS")]) + py.cor.var
-header.info[1,5] <- as.numeric(message.data$message.6[which(message.data$message.1 == "DISPLAY_COORDS")]) + py.cor.var
+header.info[1,4] <- as.numeric(message.data$message.4[which(message.data$message.1 == "DISPLAY_COORDS")]) + 1
+header.info[1,5] <- as.numeric(message.data$message.5[which(message.data$message.1 == "DISPLAY_COORDS")]) + 1
 
 # header.info[1,6] <- as.character((message.data$message.3[which(
 #   message.data$message.2 == "datetime")])[1])
