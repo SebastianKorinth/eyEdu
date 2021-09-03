@@ -3,6 +3,7 @@ EyEduImportEyeLinkData <- function(poi.start = NA,
                               asc.path = NA,
                               message.dict = NA,
                               remove.outliers = TRUE,
+                              python.correction = FALSE,
                               eye.sides = "R"){
 
 # List of files that will be processed.
@@ -21,6 +22,13 @@ eyEdu.data$participants <- list()
 length(eyEdu.data$participants) = length(raw.file.list)
 names(eyEdu.data$participants) = raw.file.list
 
+if (python.correction == TRUE){
+  py.cor.var = 1
+} else {
+  py.cor.var = 0
+}
+
+
 # Loops through files 
 for(file.counter in 1:length(raw.file.list)) {
 raw.data <- read.csv(paste(raw.data.path,asc.path, raw.file.list[file.counter],
@@ -36,6 +44,15 @@ eye.mov.data[1:ncol(eye.mov.data)] <- suppressWarnings(sapply(eye.mov.data[1:nco
 if(eye.sides == "R"){
   colnames(eye.mov.data)[1:4] <- c("time","Rrawx", "Rrawy","Rpupil")
 }
+
+if(eye.sides == "L"){
+  colnames(eye.mov.data)[1:4] <- c("time","Lrawx", "Lrawy","Lpupil")
+}
+
+if(eye.sides == "B"){
+  colnames(eye.mov.data)[1:7] <- c("time","Lrawx", "Lrawy","Lpupil","Rrawx", "Rrawy","Rpupil")
+}
+
 
 empty.columns <- sapply(eye.mov.data, function(x)all(is.na(x)))
 eye.mov.data <- eye.mov.data[,-(which(empty.columns == TRUE))]
@@ -54,10 +71,10 @@ eye.mov.data$rawx <- eye.mov.data$Rrawx
 eye.mov.data$rawy <- eye.mov.data$Rrawy
 eye.mov.data$Ravgx <- eye.mov.data$Rrawx
 eye.mov.data$Ravgy <- eye.mov.data$Rrawy
-eye.mov.data$Lavgx <- 0
-eye.mov.data$Lavgy <- 0
-eye.mov.data$Lrawx <- 0
-eye.mov.data$Lrawy <- 0
+eye.mov.data$Lavgx <- eye.mov.data$Lrawx
+eye.mov.data$Lavgy <- eye.mov.data$Lrawy
+eye.mov.data$Lrawx <- eye.mov.data$Lrawx
+eye.mov.data$Lrawy <- eye.mov.data$Lrawy
 
 # Fixes rowname order for indexing.
 row.names(eye.mov.data) <- 1: nrow(eye.mov.data)
@@ -130,7 +147,7 @@ trial.info$stimulus.id <- as.numeric(message.data$message.2[which(
 participant.nr <- as.numeric(message.data$message.2[which(message.data$message.1 == "subject_nr")][1])
 
 trial.info$background.image <- paste(participant.nr, "_", 
-                                     trial.info$trial.index - 1,
+                                     trial.info$trial.index - py.cor.var,
                                      "_", trial.info$stimulus.id,
                                      ".png", sep = "")
 
@@ -250,8 +267,8 @@ header.info[1,3] <- as.numeric(message.data$message.4[which(
   message.data$message.1 == "!MODE")[1]])
 
 # The display dimension are set for python (start counting a 0), hence, a 1 is added 
-header.info[1,4] <- as.numeric(message.data$message.5[which(message.data$message.1 == "DISPLAY_COORDS")]) + 1
-header.info[1,5] <- as.numeric(message.data$message.6[which(message.data$message.1 == "DISPLAY_COORDS")]) + 1
+header.info[1,4] <- as.numeric(message.data$message.5[which(message.data$message.1 == "DISPLAY_COORDS")]) + py.cor.var
+header.info[1,5] <- as.numeric(message.data$message.6[which(message.data$message.1 == "DISPLAY_COORDS")]) + py.cor.var
 
 # header.info[1,6] <- as.character((message.data$message.3[which(
 #   message.data$message.2 == "datetime")])[1])
