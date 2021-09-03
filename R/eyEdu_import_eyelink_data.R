@@ -147,7 +147,14 @@ temp.message <- message.data[which(message.data$message.1 == "stimulus"), 3:ncol
 
 trial.info$stimulus.id <- trial.info$trial.index
 
-participant.nr <- message.data$message.2[which(message.data$message.1 == participant.id.var)][1]
+if(is.na(participant.id.var)){
+  participant.nr <- gsub(".asc", "", raw.file.list[file.counter], ignore.case = T)
+}else{
+  participant.nr <- message.data$message.2[which(message.data$message.1 == participant.id.var)][1]
+}
+
+
+
 
 trial.info$background.image <- paste(participant.nr, "_", 
                                      trial.info$trial.index - py.cor.var,
