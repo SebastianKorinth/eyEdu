@@ -6,6 +6,8 @@ server <- function(input, output, session) {
   trial.image.fn <- reactive({
     
     req(input$trial.number)
+    
+    if (sparse.aoi.definition == TRUE){
     image.list <- list.files(paste(raw.data.path, "images/", sep = ""))
     stim.id.file.names <- gsub(".*_", "", image.list)
     image.index <- eyEdu.data$participants[[
@@ -13,6 +15,14 @@ server <- function(input, output, session) {
     stim.id.concat <- gsub(".*_", "", image.index)
     image.index <- image.list[which(stim.id.file.names == stim.id.concat)[1]]
     background.image.file <- paste(raw.data.path, "images/",image.index, sep = "")
+    
+    }else{
+    image.list <- list.files(paste(raw.data.path, "images/", sep = ""))
+    image.index <- eyEdu.data$participants[[
+      list.entry.nr]]$trial.info$background.image[trial.nr]
+    background.image.file  <- paste(raw.data.path, "images/",image.index, sep = "")
+    }
+    
     
     return(background.image.file)
     
@@ -179,6 +189,8 @@ server <- function(input, output, session) {
     rm(list = objs[grep("page.width", objs)], pos = ".GlobalEnv")
     rm(list = objs[grep("page.height", objs)], pos = ".GlobalEnv")
     rm(list = objs[grep("aoi.names.screenshot", objs)], pos = ".GlobalEnv")
+    rm(list = objs[grep("sparse.aoi.definition", objs)], pos = ".GlobalEnv")
+    
     stopApp()
   })
 
