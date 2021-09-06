@@ -12,10 +12,6 @@ EyEduPlotTrial <- function(participant.nr = NA,
                           aoi.names.screenshot = TRUE,
                           fix.size.scale = 4){
 
-# checks if eyEdu.data is loaded already, if not will be loaded
-  if(!exists("eyEdu.data")) {
-    load(file = paste(raw.data.path, "eyEdu_data.Rda", sep = "")) 
-  }
 
 # Two options: either participant name or participant number can be provided 
 if (is.na(participant.name)) {
@@ -76,12 +72,11 @@ if(aoi.names.screenshot == F) {
   # Generates name for relevant aoi file taken from stimulus message instead of screenshot
   aoi.stimulus.message <- eyEdu.data$participants[[list.entry.nr]]$trial.info$stimulus.message[
     eyEdu.data$participants[[list.entry.nr]]$trial.info$trial.index == trial.nr]
-  
   aoi.stimulus.message <- paste(aoi.stimulus.message,".png", sep ="")
   
   # Extracts relevant aoi.info
   trial.aoi <- eyEdu.data$aoi.info[[aoi.stimulus.message]]
-  if(is.null(trial.aoi)){
+ if(is.null(trial.aoi)){
     trial.aoi <- data.frame(line.aoi.index = 0,
                             x.left = 0,
                             x.right = 0,
@@ -92,40 +87,50 @@ if(aoi.names.screenshot == F) {
                             aoi.index =0)
   }
   
-  }else{
+}
 
-
-# Index of aoi.info corresponding to stimulus id, since any given stimulus.id
-# most likely appears several times (e.g., different combinations of trial and
-# participant) only the first match of all possible matches will be used.
-
-if (is.null(eyEdu.data$aoi.info)) {
-  trial.aoi <- data.frame(line.aoi.index = 0,
-                          x.left = 0,
-                          x.right = 0,
-                          y.top = 0,
-                          y.bottom = 0,
-                          line.number = 0,
-                          image.name = NA,
-                          aoi.index =0)
-  } else {
-    # Generates name for relevant aoi file
-  aoi.index <- grep(paste("*_", stimulus.id,".png", sep =""), 
+if (aoi.names.screenshot == T & sparse.aoi.definition == T) {
+  # Index of aoi.info corresponding to stimulus id, since any given stimulus.id
+  # most likely appears several times (e.g., different combinations of trial and
+  # participant) only the first match of all possible matches will be used.
+  
+  # Generates name for relevant aoi file
+  aoi.index <- grep(paste("*_", stimulus.id, ".png", sep = ""),
                     names(eyEdu.data$aoi.info))[1]
   # Extracts relevant aoi.info
   trial.aoi <- eyEdu.data$aoi.info[[aoi.index]]
-    if(is.null(trial.aoi)){
-    trial.aoi <- data.frame(line.aoi.index = 0,
-                            x.left = 0,
-                            x.right = 0,
-                            y.top = 0,
-                            y.bottom = 0,
-                            line.number = 0,
-                            image.name = NA,
-                            aoi.index =0)
-    }
-    }}
+  if (is.null(trial.aoi)) {
+    trial.aoi <- data.frame(
+      line.aoi.index = 0,
+      x.left = 0,
+      x.right = 0,
+      y.top = 0,
+      y.bottom = 0,
+      line.number = 0,
+      image.name = NA,
+      aoi.index = 0)
+  }
+}
+#}
 
+if (aoi.names.screenshot == T & sparse.aoi.definition == F) {
+  
+    # Grabs aoi file name directly
+    aoi.index <- eyEdu.data$participants[[list.entry.nr]]$trial.info$background.image[trial.nr]
+    # Extracts relevant aoi.info
+    trial.aoi <- eyEdu.data$aoi.info[[aoi.index]]
+    if(is.null(trial.aoi)){
+      trial.aoi <- data.frame(line.aoi.index = 0,
+                              x.left = 0,
+                              x.right = 0,
+                              y.top = 0,
+                              y.bottom = 0,
+                              line.number = 0,
+                              image.name = NA,
+                              aoi.index =0)
+    }
+}
+#}
 
 ##### background image #####
 if (sparse.aoi.definition == TRUE){
@@ -136,8 +141,9 @@ if (sparse.aoi.definition == TRUE){
   stim.id.concat <- gsub(".*_", "", image.index)
   image.index <- image.list[which(stim.id.file.names == stim.id.concat)[1]]
   background.image.file <- paste(raw.data.path, "images/",image.index, sep = "")
+} 
 
-} else { 
+if (sparse.aoi.definition == FALSE){ 
 
 # Stimulus.id corresponding to background file
 image.list <- list.files(paste(raw.data.path, "images/", sep = ""))
