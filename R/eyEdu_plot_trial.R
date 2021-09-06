@@ -12,7 +12,11 @@ EyEduPlotTrial <- function(participant.nr = NA,
                           aoi.names.screenshot = TRUE,
                           fix.size.scale = 4){
 
-
+# checks if eyEdu.data is loaded already, if not will be loaded
+if(!exists("eyEdu.data")) {
+  load(file = paste(raw.data.path, "eyEdu_data.Rda", sep = "")) 
+}
+  
 # Two options: either participant name or participant number can be provided 
 if (is.na(participant.name)) {
  # use participant number
