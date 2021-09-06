@@ -19,7 +19,7 @@ server <- function(input, output, session) {
     }else{
     image.list <- list.files(paste(raw.data.path, "images/", sep = ""))
     image.index <- eyEdu.data$participants[[
-      list.entry.nr]]$trial.info$background.image[trial.nr]
+      input$participant.name]]$trial.info$background.image[input$trial.number]
     background.image.file  <- paste(raw.data.path, "images/",image.index, sep = "")
     }
     
