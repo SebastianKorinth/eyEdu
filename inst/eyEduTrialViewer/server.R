@@ -93,12 +93,22 @@ server <- function(input, output, session) {
       aoi.stimulus.message <- paste(aoi.stimulus.message,".png", sep ="")
       print(aoi.stimulus.message)
       trial.aoi <- eyEdu.data$aoi.info[[aoi.stimulus.message]]
-    } else {
+    } 
+    
+    if(aoi.names.screenshot == TRUE & sparse.aoi.definition == TRUE) {
       # Generates name for relevant aoi file
       trial.aoi.index <- grep(paste("*_", stimulus.id,".png", sep =""), 
                               names(eyEdu.data$aoi.info))[1]
       # Extracts relevant aoi.info
       trial.aoi <- eyEdu.data$aoi.info[[trial.aoi.index]]}
+    
+    if(aoi.names.screenshot == TRUE & sparse.aoi.definition == FALSE) {
+      # Grabs the name for the relevant aoi file directly
+      trial.aoi.index <- eyEdu.data$participants[[
+        input$participant.name]]$trial.info$background.image[input$trial.number]
+      # Extracts relevant aoi.info
+      trial.aoi <- eyEdu.data$aoi.info[[trial.aoi.index]]}
+    
     
     if(is.null(trial.aoi)){
       trial.aoi <- data.frame(line.aoi.index = 0,
