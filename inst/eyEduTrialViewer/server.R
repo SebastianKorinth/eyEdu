@@ -36,7 +36,7 @@ server <- function(input, output, session) {
              trial.index == input$trial.number)
       if(nrow(trial.samples) < 1){
         trial.samples[1:3,] <- 0
-        trial.samples$poi <- poi.name
+        trial.samples$poi <- input$poi.name
       }
       
       if(input$poi.name != "trial"){
