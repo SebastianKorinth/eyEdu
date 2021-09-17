@@ -11,7 +11,7 @@ shinyUI(fluidPage(
                   choices = names(eyEdu.data$participants)), 
       
       selectInput("poi.name", "Period of interest:", 
-                  choices = c("trial", names(table(eyEdu.data[["participants"]][[1]][["sample.data"]][["poi"]])))), 
+                  choices = c("trial", names(table(eyEdu.data[["participants"]][[1]][["fixation.data"]][["poi"]])))), 
       
     # interactive input to adjust maximal number of available trials
       
