@@ -41,6 +41,11 @@ trial.samples <- subset(eyEdu.data$participants[[list.entry.nr]]$sample.data,
                             list.entry.nr]]$sample.data$trial.index 
                         == trial.nr)
 
+if(nrow(trial.samples) < 1){
+  trial.samples[1:3,] <- 0
+  trial.samples$poi <- poi.name
+}
+
 if(!is.na(poi.name)){
   trial.samples <- subset(trial.samples, poi == poi.name)
  }

@@ -5,7 +5,8 @@ EyEduImportEyeLinkData <- function(poi.start = NA,
                               participant.id.var ="subject_nr",
                               remove.outliers = TRUE,
                               python.correction = FALSE,
-                              eye.sides = "R"){
+                              eye.sides = "R",
+                              include.samples = FALSE){
 
 # List of files that will be processed.
 raw.file.list <- list.files(path= paste(raw.data.path, asc.path, sep = ""), 
@@ -32,6 +33,13 @@ if (python.correction == TRUE){
 
 # Loops through files 
 for(file.counter in 1:length(raw.file.list)) {
+  
+### Import eye movement and sample data  
+  
+if(include.samples == FALSE){
+  eye.mov.data <- data.frame(matrix(data = NA, nrow = 1, ncol = 11))
+  colnames(eye.mov.data) <- c("time","Lrawx", "Lrawy","Lpupil","Rrawx", "Rrawy","Rpupil", "avgx", "avgy", "rawx", "rawy")
+} else {
 raw.data <- read.csv(paste(raw.data.path,asc.path, raw.file.list[file.counter],
                      sep = ""),sep="", header = F, encoding = "UTF-8",
                      strip.white=T, stringsAsFactors=FALSE)
@@ -80,6 +88,9 @@ eye.mov.data$Lrawy <- eye.mov.data$Lrawy
 # Fixes rowname order for indexing.
 row.names(eye.mov.data) <- 1: nrow(eye.mov.data)
 
+}
+
+### Import message data
 raw.data <- read.csv(paste(raw.data.path,asc.path, raw.file.list[file.counter],
                            sep = ""),sep=" ", header = F, encoding = "UTF-8",
                      strip.white=T, stringsAsFactors=FALSE)
@@ -169,6 +180,8 @@ trial.info$background.image <- paste(participant.nr, "_",
 # stimulus and response timing (1 ms accuracy). The nearest eye movement
 # sample point corresponding to start and stop messages will be used
 eye.mov.data$trial.index <- 0
+
+if(include.samples == TRUE) {
 for(trial.counter in 1:nrow(trial.info)) {
   start.row <-  which.min(
     abs(eye.mov.data$time - trial.info$start.message[trial.counter]))
@@ -202,10 +215,10 @@ if (length(message.dict) >1){
 # Deletes rows that were not asigned to a trial due to differences in sample
 # precision (i.e., 2 ms vs. 1 ms) or because ...
 eye.mov.data <- subset(eye.mov.data, eye.mov.data$trial.index > 0)
+}
 
 
-
-#### Extra import fixations
+#### Import fixations
 raw.data <- read.csv(paste(raw.data.path,asc.path, raw.file.list[file.counter],
                            sep = ""),sep="", header = F, encoding = "UTF-8",
                      strip.white=T, stringsAsFactors=FALSE)
