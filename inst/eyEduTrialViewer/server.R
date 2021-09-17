@@ -34,6 +34,10 @@ server <- function(input, output, session) {
     reactive({
       trial.samples <- subset(eyEdu.data$participants[[input$participant.name]]$sample.data,
              trial.index == input$trial.number)
+      if(nrow(trial.samples) < 1){
+        trial.samples[1:3,] <- 0
+        trial.samples$poi <- poi.name
+      }
       
       if(input$poi.name != "trial"){
         trial.samples <- subset(trial.samples, poi == input$poi.name)
