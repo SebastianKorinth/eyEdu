@@ -80,7 +80,7 @@ server <- function(input, output, session) {
                  1,
                  min = 1, 
                  max = max(eyEdu.data$participants[[
-                   input$participant.name]]$sample.data$trial.index))
+                   input$participant.name]]$fixation.data$trial.index))
   })
   
 
