@@ -62,14 +62,8 @@ trial.info <- as.data.frame(matrix(ncol = 3, nrow = number.of.trials))
 colnames(trial.info) <- c("start.message", "stop.message", "stimulus.message")
 trial.info$start.message <- as.numeric(message.data$message.3[which(
   message.data$message.2 == poi.start)])
-
-if (poi.end == "time_pygaze_stop_recording"){
-trial.info$stop.message <- as.numeric(message.data$message.3[which(
-  message.data$message.2 == poi.end)])
-}else{
-  trial.info$stop.message <- as.numeric(message.data$message.3[which(
-    message.data$message.2 == poi.end)]) + trial.info$start.message
-  }
+ trial.info$stop.message <- as.numeric(message.data$message.3[which(
+    message.data$message.2 == poi.end)])
 
 trial.info$stimulus.message <- gsub("var stimulus ", "", 
                                     message.data$state[which(
