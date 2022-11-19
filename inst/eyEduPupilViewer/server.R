@@ -15,7 +15,7 @@ server <- function(input, output, session) {
 
           # raw pupil data
           plot.pupil.raw <- eyEdu.data$participants[[
-            input$participant.name]]$sample.data$Rpupil[eyEdu.data$participants[[
+            input$participant.name]]$sample.data$pupil.raw[eyEdu.data$participants[[
               input$participant.name]]$sample.data$trial.index == input$trial.number & eyEdu.data$participants[[input$participant.name]]$sample.data$poi == input$poi.var]
           # interpolated pupil data
           plot.pupil.intpol <- eyEdu.data$participants[[
@@ -59,7 +59,7 @@ server <- function(input, output, session) {
           
           # raw pupil data
           plot.pupil.raw <- eyEdu.data$participants[[
-            input$participant.name]]$sample.data$Rpupil[eyEdu.data$participants[[
+            input$participant.name]]$sample.data$pupil.raw[eyEdu.data$participants[[
               input$participant.name]]$sample.data$trial.index == input$trial.number]
           # interpolated pupil data
           plot.pupil.intpol <- eyEdu.data$participants[[
