@@ -7,6 +7,70 @@ EyEdu (pronounced "I do!") is not intended to replace existing or commercial sof
 The package provides basic functions to import raw eye-tracking data (currently only for EyeTribe), to visualize data, to conduct fixation detection, to create or import area of interest definitions and [several additional functions](#list-of-functions).
 Example experiments including real eye movement data can be downloaded and used to run some first analyses (aka playing around). This package is obviously incomplete, full of bugs and might change a lot in the future. If you think that you can make it better, join the team!
 
+### November 2022 +++ NEW +++ NEW +++ NEW +++ NEW +++
+
+Several new features for the analysis of pupil dilatation data have been added to eyEdu.
+
+A new function that sets the onset of the time variable to 0 for the start of each trial or period of interest
+
+``` r
+EyEduAdjustTiming() 
+
+```
+
+Pupil data are often full of artefacts. Blinks and other forms of missing data (e.g., tracker loss) introduce a lot of noise. *EyEduPupilPreproc()* attempts to identify and to remove these artefacts if possible by interpolating time windows without data and by applying a filter. There are several arguments that should be set carefully.  
+
++ **regression.basis** number of time points before and after a blink that will be used to calculate a loess regression model to interpolate missing data   
+
++ **patch.before** blink onsets usually come with a small increase in pupil size that might distort the interpolation, patch.before defines the number of samples that will be removed before the actual onset   
+
++ **patch.after** same as patch before only for the blink offset  
+
++ **filt.win.length** filtering or rather smoothing is conducted using a moving average, so the length of this window defines alters the degree of "smoothness", the longer the window the smoother the data, must be an odd number!   
+
++ **mov.win** some blinks (or rather periods of data loss) are so short that they do not reach a pupil size level of 0. These spikes are detected using a moving window approach that tests basically for every single sample and, for instance, four samples ahead (i.e., mov.win = 4) whether the sum of values is higher than a threshold value defined via **threshold.var***  
+
++ **threshold.var** value for pupil size change that indicates a steep decrease (i.e., blink onset) or  steep increase in pupil size (i.e., blink offset)   
+
++ **span.var** Interpolation is achieved through a loess regression model. The **span.var** ranging between 0 and 1 is (at least for me) not trivial. Here a link to some background information on [loess regressions](https://www.statsdirect.com/help/nonparametric_methods/loess.htm).
+
+``` r
+EyEduPupilPreproc(regression.basis = 100,
+                  patch.before = 40,
+                  patch.after = 40,
+                  filt.win.length = 37, 
+                  mov.win = 4, 
+                  threshold.var = 400,
+                  span.var = 0.7)
+```
+Obviously, you should check whether preprocessing created some meaningful results by comparing the raw pupil data with interpolated and filtered data. For this purpose, eyEdu has another shinyApp. The argument **scale.var** defines how large the plots are rendered. If you are working on a large monitor try 1.5, on a smaller laptop screen try 0.6. 
+
+``` r
+EyEduPupilViewer(scale.var = 1.3)
+
+```
+![](README_files/figure-markdown_github/pupil_viewer_1.png)
+
+There are several ways to compute baseline adjustment. Currently, eyEdu provides two measures, that is, **relative change to baseline** and **percentage change**. The function *EyEduPupilBaseline()* has the following arguments:  
+
++ **poi.choice** defines for which period of interest baseline adjustment should be computed  
+
++ **data.type** which type of data should be used, options are "raw", "interpolated", and "filtered"   
+
++ **baseline.width** the number of samples before the onset of the poi that serves as the baseline
+
+``` r
+EyEduPupilBaseline(poi.choice = "anticipate",
+                   data.type = "interpolated",
+                   baseline.width = 200)
+```
+
+Currently, there are three measures that represent the impact of artefacts in various forms. These are written into the *eyEdu.data* format. The variable *poi.bink.count* provides information on how many blinks where in the poi (+ baseline) and *poi.max.blink.length* indicates whether blinks were especially short or long. On a more general noise indicator is the number of zero values in the poi (+ baseline.var) *poi.sum.zeros*. Finally, the information for which poi the impact of noise has been estimated can be found in the variable *poi.noise*.
+
+``` r 
+EyEduPupilNoiseEstimate(poi.var = "anticipate", 
+                        baseline.var = 200) 
+```
 
 
 ### September 2021 +++ NEW +++ NEW +++ NEW +++ NEW +++
