@@ -7,7 +7,8 @@ EyEduPupilPreproc <- function(regression.basis = 100,
                               left.eye = FALSE,
                               span.var = 0.5) {
 
-# Loads eyEdu_data  
+
+  # Loads eyEdu_data  
 load(file = paste(raw.data.path, "eyEdu_data.Rda", sep = ""))
   
 # Function for moving average filter
@@ -175,12 +176,24 @@ for (participant.counter in 1:length(eyEdu.data$participants)) {
       }
       
       # Exception
-      # happend that even the second blink is too close to the trial onset
+      # happened that even the second blink is too close to the trial onset
       if(blink.onsets[1] - regression.basis <= 0){
         blink.onsets <- blink.onsets[-1]
         blink.offsets <- blink.offsets[-1]
       }
       
+      # Exception
+      # happend that even the third blink is too close to the trial onset
+      if(blink.onsets[1] - regression.basis <= 0){
+        blink.onsets <- blink.onsets[-1]
+        blink.offsets <- blink.offsets[-1]
+      }
+      # Exception
+      # happend that even the fourth blink is too close to the trial onset
+      if(blink.onsets[1] - regression.basis <= 0){
+        blink.onsets <- blink.onsets[-1]
+        blink.offsets <- blink.offsets[-1]
+      }
       # Exception 
       # trial ends with blink so no offset for last blink 
       # defines last row of trial.sample.data as offset
@@ -196,6 +209,21 @@ for (participant.counter in 1:length(eyEdu.data$participants)) {
         blink.onsets <- blink.onsets[-length(blink.onsets)]
         blink.offsets <- blink.offsets[-length(blink.offsets)]
       }
+      
+      # Exception 
+      # if trial contains only one blink to close to trial offset, which is removed above
+      if (length(blink.onsets) == 0) {
+        # filters data using function defined above
+        trial.sample.data$pupil.filt <- as.numeric(mov.av.fu(trial.sample.data$pupil.interpolated, filt.win = filt.win.length))
+        # the filter above creates missing values, which are patched with pupil.interpolated values
+        trial.sample.data$pupil.filt[which(is.na(trial.sample.data$pupil.filt))] <- trial.sample.data$pupil.interpolated[which(is.na(trial.sample.data$pupil.filt))]
+        trial.sample.data$zeroOneTemp <- NULL
+        trial.sample.data$diffTemp <- NULL
+        # collects interpolated and filtered data for each trial
+        trial.collect <- rbind(trial.collect, trial.sample.data)
+        next
+      }
+      
       
       # Removes temp variables
       trial.sample.data$zeroOneTemp <- NULL
@@ -259,7 +287,7 @@ for (participant.counter in 1:length(eyEdu.data$participants)) {
         blink.patched$pupil[zero.index] <- NA
                 
         # EXCEPTION 
-        # if pupil data are all NA skipt this blink
+        # if pupil data are all NA skip this blink
         if(length(which(is.na(blink.patched$pupil))) == nrow(blink.patched)){
           trial.sample.data$pupil.interpolated[which(trial.sample.data$blink.count == blink.index)] <-
             trial.sample.data$pupil.interpolated[which(trial.sample.data$blink.count == blink.index)]
@@ -276,8 +304,10 @@ for (participant.counter in 1:length(eyEdu.data$participants)) {
         blink.patched$predict <- suppressWarnings(predict(loess.results, data.frame(X = missing.index)))
         
         # Writes the interpolated data into the pupil.interpolated variable of trial.sample.data
+        suppressWarnings(
         trial.sample.data$pupil.interpolated[which(trial.sample.data$blink.count == blink.index)] <-
           blink.patched$predict[which(blink.patched$blink == 1)]
+        )
       } # end blink loop
       
       # filters data using function defined above
