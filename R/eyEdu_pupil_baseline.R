@@ -1,7 +1,7 @@
 EyEduPupilBaseline <- function(poi.choice = "results",
                                baseline.width = 100,
+                               baseline.method = "median",
                                data.type  = "interpolated") {
-
 
 # Loads eyEdu_data    
 load(file = paste(raw.data.path, "eyEdu_data.Rda", sep = ""))
@@ -42,7 +42,7 @@ for (trial.counter in 1:max(eyEdu.data$participants[[participant.counter]]$sampl
       trial.sample.data$base.scaled <- NA
       
       # Computes relative change to baseline poi.row.index for the start of the 
-      # basline time window
+      # baseline time window
       poi.row.index <-which(trial.sample.data$poi == poi.choice)
       
       # Exception
@@ -56,8 +56,15 @@ for (trial.counter in 1:max(eyEdu.data$participants[[participant.counter]]$sampl
      
       # data type: interpolated
       if (data.type == "interpolated"){
+        
+        if(baseline.method == "mean"){
         base.line <- mean(trial.sample.data$pupil.interpolated[baseline.index[1]: baseline.index[2]], na.rm = TRUE)
-          trial.sample.data$base.change.raw <-  trial.sample.data$pupil.interpolated - base.line
+        }else{
+        base.line <- median(trial.sample.data$pupil.interpolated[baseline.index[1]: baseline.index[2]], na.rm = TRUE)
+        }
+        # Baseline subtracted
+        trial.sample.data$base.change.raw <-  trial.sample.data$pupil.interpolated - base.line
+          
         # Percentage change
         trial.sample.data$base.change.perc <- ((trial.sample.data$pupil.interpolated * 100)/base.line)- 100
         # Scale - the [, 1] is because scale() returns a matrix with its dimensions written into the header
@@ -66,7 +73,12 @@ for (trial.counter in 1:max(eyEdu.data$participants[[participant.counter]]$sampl
       }
       
       if (data.type == "filtered"){
+        if(baseline.method == "mean"){
         base.line <- mean(trial.sample.data$pupil.filt[baseline.index[1]: baseline.index[2]], na.rm = TRUE)
+        }else{
+          base.line <- median(trial.sample.data$pupil.filt[baseline.index[1]: baseline.index[2]], na.rm = TRUE)
+        }
+        
         trial.sample.data$base.change.raw <-  trial.sample.data$pupil.filt - base.line
         # Percentage change
         trial.sample.data$base.change.perc <- ((trial.sample.data$pupil.filt * 100)/base.line)- 100
@@ -77,7 +89,12 @@ for (trial.counter in 1:max(eyEdu.data$participants[[participant.counter]]$sampl
       }
       
       if (data.type == "raw"){
+        if(baseline.method == "mean"){
         base.line <- mean(trial.sample.data$pupil.raw[baseline.index[1]: baseline.index[2]], na.rm = TRUE)
+      }else{
+        base.line <- median(trial.sample.data$pupil.raw[baseline.index[1]: baseline.index[2]], na.rm = TRUE)
+      }
+        
         trial.sample.data$base.change.raw <-  trial.sample.data$pupil.raw - base.line
         # Percentage change
         trial.sample.data$base.change.perc <- ((trial.sample.data$pupil.raw * 100)/base.line)- 100
@@ -114,7 +131,7 @@ for (trial.counter in 1:max(eyEdu.data$participants[[participant.counter]]$sampl
     )
     
     
-  } # end particpant loop
+  } # end participant loop
   
   print("Finished baseline adjustment. Now saving eyEdu data. This might take a while.")
   save(eyEdu.data, file = paste(raw.data.path, "eyEdu_data.Rda", sep = ""))
