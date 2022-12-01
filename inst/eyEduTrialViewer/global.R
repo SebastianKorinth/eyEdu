@@ -18,12 +18,17 @@ if (!dir.exists(paste(raw.data.path,"images/", sep = ""))){
       width = background.x, 
       height = background.y,
       units = "px", 
-      pointsize = 12, 
+      pointsize = 6, 
       bg = "grey")
   par(mar = c(0, 0, 0, 0))
-  plot(x = 0:100, y = 0:100, ann = F,bty = "n",type = "n",
+  plot(x = 0:500, y = 0:500, ann = F,bty = "n",type = "n",
        xaxt = "n", yaxt = "n")
-  text(x = 50,y = 50,"no background images", cex=5)
+  text(x = 250,y = 250,"No background images found! \n 
+     Attention: The plot dimension might be incorrect. \n 
+     To fix this, either provide background png-files in the images folder, \n
+     or delete the images folder and provide correct plot dimensions through \n
+     background.x = pixels and background.y = pixels in the function that calls \n
+     the eyEdu Trial Viewer shiny app.", cex=5)
   dev.off()
   }
 
