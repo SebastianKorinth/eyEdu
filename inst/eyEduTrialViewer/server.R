@@ -9,18 +9,31 @@ server <- function(input, output, session) {
     
     if (sparse.aoi.definition == TRUE){
     image.list <- list.files(paste(raw.data.path, "images/", sep = ""))
+    
+    if(image.list == "placeholder.png"){
+      background.image.file = paste(raw.data.path,"images/placeholder.png", sep = "")
+    } else {
+
+
+
     stim.id.file.names <- gsub(".*_", "", image.list)
     image.index <- eyEdu.data$participants[[
       input$participant.name]]$trial.info$background.image[input$trial.number]
     stim.id.concat <- gsub(".*_", "", image.index)
     image.index <- image.list[which(stim.id.file.names == stim.id.concat)[1]]
-    background.image.file <- paste(raw.data.path, "images/",image.index, sep = "")
+    background.image.file <- paste(raw.data.path, "images/",image.index, sep = "")}
+
     
     }else{
     image.list <- list.files(paste(raw.data.path, "images/", sep = ""))
+    if(image.list == "placeholder.png"){
+      background.image.file = paste(raw.data.path,"images/placeholder.png", sep = "")
+    } else {
+
+
     image.index <- eyEdu.data$participants[[
       input$participant.name]]$trial.info$background.image[input$trial.number]
-    background.image.file  <- paste(raw.data.path, "images/",image.index, sep = "")
+    background.image.file  <- paste(raw.data.path, "images/",image.index, sep = "")}
     }
     
     
@@ -204,6 +217,8 @@ server <- function(input, output, session) {
     rm(list = objs[grep("page.height", objs)], pos = ".GlobalEnv")
     rm(list = objs[grep("aoi.names.screenshot", objs)], pos = ".GlobalEnv")
     rm(list = objs[grep("sparse.aoi.definition", objs)], pos = ".GlobalEnv")
+    rm(list = objs[grep("background.x", objs)], pos = ".GlobalEnv")
+    rm(list = objs[grep("background.y", objs)], pos = ".GlobalEnv")
     
     stopApp()
   })
