@@ -1,5 +1,8 @@
 EyEduPupilNoiseEstimate <- function(poi.var = "trial",
                                     baseline.var = 0) {
+
+    # Loads eyEdu_data    
+  load(file = paste(raw.data.path, "eyEdu_data.Rda", sep = ""))
   
   for (participant.counter in 1:length(eyEdu.data$participants)) {
     sample.data <- eyEdu.data[["participants"]][[participant.counter]][["sample.data"]]
