@@ -175,7 +175,8 @@ server <- function(input, output, session) {
       ) +
       labs(x = "time in ms", y = "pupil size") +
       ylim(set.ymin.fn(), set.ymax.fn()) +
-      theme_gray()
+      theme_gray() +
+      theme(text = element_text(size = 20))
       })
 
   ###############################################################################
