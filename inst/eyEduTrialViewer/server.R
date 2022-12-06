@@ -10,7 +10,7 @@ server <- function(input, output, session) {
     if (sparse.aoi.definition == TRUE){
     image.list <- list.files(paste(raw.data.path, "images/", sep = ""))
     
-    if(image.list == "placeholder.png"){
+    if(image.list[1] == "placeholder.png"){
       background.image.file = paste(raw.data.path,"images/placeholder.png", sep = "")
     } else {
 
@@ -26,7 +26,7 @@ server <- function(input, output, session) {
     
     }else{
     image.list <- list.files(paste(raw.data.path, "images/", sep = ""))
-    if(image.list == "placeholder.png"){
+    if(image.list[1] == "placeholder.png"){
       background.image.file = paste(raw.data.path,"images/placeholder.png", sep = "")
     } else {
 
