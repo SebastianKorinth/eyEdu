@@ -141,9 +141,24 @@ for (participant.counter in 1:length(eyEdu.data$participants)) {
         next
       }
       
-      # Creates two vectors containing the row indeces for blin on- and offsets
+      # Creates two vectors containing the row indexes for blink on- and offsets
       blink.onsets <- which(trial.sample.data$diffTemp == -1)
       blink.offsets <- which(trial.sample.data$diffTemp == 1)
+      
+      # Exception 
+      # there is only one blink in the trial with an offset outside of the trial
+      # boundaries
+      if (length(blink.offsets) == 0) {
+        # filters data using function defined above
+        trial.sample.data$pupil.filt <- as.numeric(mov.av.fu(trial.sample.data$pupil.interpolated, filt.win = filt.win.length))
+        # the filter above creates missing values, which are patched with pupil.interpolated values
+        trial.sample.data$pupil.filt[which(is.na(trial.sample.data$pupil.filt))] <- trial.sample.data$pupil.interpolated[which(is.na(trial.sample.data$pupil.filt))]
+        trial.sample.data$zeroOneTemp <- NULL
+        trial.sample.data$diffTemp <- NULL
+        # collects interpolated and filtered data for each trial
+        trial.collect <- rbind(trial.collect, trial.sample.data)
+        next
+      }
       
       # Exception 
       # trial starts with blink so no onset for first blink 
@@ -223,7 +238,7 @@ for (participant.counter in 1:length(eyEdu.data$participants)) {
         trial.collect <- rbind(trial.collect, trial.sample.data)
         next
       }
-      
+    
       
       # Removes temp variables
       trial.sample.data$zeroOneTemp <- NULL
