@@ -41,6 +41,15 @@ for (trial.counter in 1:max(eyEdu.data$participants[[participant.counter]]$sampl
       trial.sample.data$trial.scaled <- NA
       trial.sample.data$base.scaled <- NA
       
+      
+      # EXCEPTION 
+      # trial too short
+      if (nrow(trial.sample.data) < 10) {
+        trial.collect <- rbind(trial.collect, trial.sample.data)
+        next
+      }
+      
+
       # Computes relative change to baseline poi.row.index for the start of the 
       # baseline time window
       poi.row.index <-which(trial.sample.data$poi == poi.choice)
