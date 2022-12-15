@@ -1,5 +1,7 @@
 
-EyEduGetSampleSummary  <- function(){
+EyEduGetSampleSummary  <- function(interim.save = FALSE,
+                                   poi.var = "trial",
+                                   baseline.var = 0){
 
 load(paste(raw.data.path, "eyEdu_data.Rda", sep = ""))
 
@@ -13,6 +15,39 @@ for (participant.counter in 1:length(eyEdu.data$participants)) {
   sample.df$participant.nr <- eyEdu.data$participants[[
     participant.counter]]$header.info$participant.nr
   
+  
+  ### Guessing sample rate
+  sample.length <- round(mean(diff(sample.df$time[1:20])),digits = 0)
+  
+  
+  # Sample summary restricted to poi + baseline
+  if(poi.var != "trial"){
+    
+    # Gets the start indexes of the poi
+    start.row.poi <- which(sample.df$poi == poi.var & sample.df$poi.time == 0)
+    # Start indexes of baseline
+    start.row.base <- start.row.poi - baseline.var
+    # Creates one vector from start and end indexes 
+    baseline.indexes <- unlist(Map(':',start.row.base, start.row.poi))
+    
+    base.poi.time <- seq(from = 0, by = sample.length, length.out = (baseline.var + 1))
+    base.poi.time <- rev(base.poi.time *-1)
+    base.poi.time <- rep(base.poi.time, times = length(start.row.base))
+    
+    sample.df$poi.time[baseline.indexes] <- base.poi.time
+    
+    # temporary variable that will be used for subsetting
+    sample.df$temp.var <- 0
+    # mark all rows belonging to poi
+    sample.df$temp.var[which(sample.df$poi == poi.var)] <- 1
+    # mark all rows belonging to baseline
+    sample.df$temp.var[baseline.indexes] <- 1
+    
+    
+    sample.df <- subset(sample.df, sample.df$temp.var == 1)
+    sample.df$temp.var <- NULL
+  }
+
   if(participant.counter == 1)
   {
     sample.summary <- sample.df
@@ -29,8 +64,14 @@ for (participant.counter in 1:length(eyEdu.data$participants)) {
               "out of", 
               max(length(eyEdu.data$participants)), sep = " ")) 
   
+  if(interim.save == TRUE){
+    save(sample.summary, file = paste(raw.data.path, "sample_summary.Rda", sep = ""))
+  }
+  
 }
+  if(interim.save !=TRUE){
 save(sample.summary, file = paste(raw.data.path, "sample_summary.Rda",
                                     sep = ""))
+  }
 }
 
