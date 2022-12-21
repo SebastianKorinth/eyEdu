@@ -1,7 +1,7 @@
-EyEduPupilAggregate <- function(data= NULL,
-                                measurevar = NULL, 
-                                groupvars = NULL, 
-                                na.rm=T, 
+EyEduPupilAggregate <- function(sample.summary = NULL,
+                                pupil.var = NULL, 
+                                group.vars = NULL, 
+                                na.rm = TRUE, 
                                 conf.interval=.95) {
   
   # This is not a genuine eyEdu function. When I started to learn R, I have 
@@ -17,19 +17,19 @@ EyEduPupilAggregate <- function(data= NULL,
   }
   
   # Collapse the data
-  formula <- as.formula(paste(measurevar, paste(groupvars, collapse=" + "), sep=" ~ "))
-  datac <- summaryBy(formula, data=data, FUN=c(length2,mean,sd), na.rm=na.rm)
+  formula <- as.formula(paste(pupil.var, paste(group.vars, collapse=" + "), sep=" ~ "))
+  sample.aggregated <- summaryBy(formula, data=sample.summary, FUN=c(length2,mean,sd), na.rm=na.rm)
   
   # Rename columns
-  names(datac)[ names(datac) == paste(measurevar, ".mean",    sep="") ] <- measurevar
-  names(datac)[ names(datac) == paste(measurevar, ".sd",      sep="") ] <- "sd"
-  names(datac)[ names(datac) == paste(measurevar, ".length2", sep="") ] <- "N"
-  datac$se <- datac$sd / sqrt(datac$N)
+  names(sample.aggregated)[ names(sample.aggregated) == paste(pupil.var, ".mean",    sep="") ] <- paste0(pupil.var, ".mean")
+  names(sample.aggregated)[ names(sample.aggregated) == paste(pupil.var, ".sd",      sep="") ] <- "sd"
+  names(sample.aggregated)[ names(sample.aggregated) == paste(pupil.var, ".length2", sep="") ] <- "N"
+  sample.aggregated$se <- sample.aggregated$sd / sqrt(sample.aggregated$N)
   
   # e.g., if conf.interval is .95, use .975 (above/below), and use df=N-1
-  ciMult <- qt(conf.interval/2 + .5, datac$N-1)
-  datac$ci <- datac$se * ciMult
+  ciMult <- qt(conf.interval/2 + .5, sample.aggregated$N-1)
+  sample.aggregated$ci <- sample.aggregated$se * ciMult
   
-  return(datac)
+  save(sample.aggregated, file = paste(raw.data.path, "sample_aggregated.Rda", sep = ""))
 }
   
