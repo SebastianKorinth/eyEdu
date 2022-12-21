@@ -329,6 +329,7 @@ for(list.entry.number  in 1 :length(names(eyEdu.data$participants))) {
 }
 eyEdu.data$participant.table <- participant.table
 
+print("Saving data to eyEdu_data.Rda, this might take a while.")
 save(eyEdu.data, file = paste(raw.data.path,"eyEdu_data.Rda", sep = ""))
 return("Done!")
 }
