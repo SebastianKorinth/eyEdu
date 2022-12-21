@@ -36,7 +36,7 @@ shinyUI(fluidPage(
       
       h5("Scale Y axis", align = "center"),
       
-      numericInput("max.y", "y-axis max:", 8000, 
+      numericInput("max.y", "y-axis max:", 10000, 
                    min = 100, max = 100000, step = 50),
       
       numericInput("min.y", "y-axis min:", 0, 
