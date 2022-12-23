@@ -1,6 +1,6 @@
 EyEduPupilBaseline <- function(poi.choice = "results",
                                baseline.width = 100,
-                               baseline.method = "median",
+                               baseline.method = "mean",
                                data.type  = "interpolated") {
 
 # Loads eyEdu_data    
@@ -62,55 +62,92 @@ for (trial.counter in 1:max(eyEdu.data$participants[[participant.counter]]$sampl
       }
         
       baseline.index <- c(min((poi.row.index) - baseline.width), min((poi.row.index)-1))
-     
-      # data type: interpolated
+      
+      ##########################################################################
+      ################## data type: interpolated ###############################
+      ##########################################################################
       if (data.type == "interpolated"){
+        
+        # Scale - the [, 1] is because scale() returns a matrix with its dimensions written into the header
+        trial.sample.data$trial.scaled <- scale(trial.sample.data$pupil.interpolated)[, 1]
+        # Scale of poi, so actual baseline adjustment can be calculated below
+        trial.sample.data$base.scaled[baseline.index[1]: max(poi.row.index)] <- scale(
+          trial.sample.data$pupil.interpolated[baseline.index[1]: max(poi.row.index)])[, 1]
         
         if(baseline.method == "mean"){
         base.line <- mean(trial.sample.data$pupil.interpolated[baseline.index[1]: baseline.index[2]], na.rm = TRUE)
+        scale.base.line <- mean(trial.sample.data$base.scaled[baseline.index[1]: baseline.index[2]], na.rm = TRUE)
         }else{
         base.line <- median(trial.sample.data$pupil.interpolated[baseline.index[1]: baseline.index[2]], na.rm = TRUE)
-        }
-        # Baseline subtracted
-        trial.sample.data$base.change.raw <-  trial.sample.data$pupil.interpolated - base.line
-          
-        # Percentage change
-        trial.sample.data$base.change.perc <- ((trial.sample.data$pupil.interpolated * 100)/base.line)- 100
-        # Scale - the [, 1] is because scale() returns a matrix with its dimensions written into the header
-        trial.sample.data$trial.scaled <- scale(trial.sample.data$pupil.interpolated)[, 1]
-        trial.sample.data$base.scaled[baseline.index[1]: max(poi.row.index)] <- scale(trial.sample.data$pupil.interpolated[baseline.index[1]: max(poi.row.index)])[, 1]
-      }
-      
-      if (data.type == "filtered"){
-        if(baseline.method == "mean"){
-        base.line <- mean(trial.sample.data$pupil.filt[baseline.index[1]: baseline.index[2]], na.rm = TRUE)
-        }else{
-          base.line <- median(trial.sample.data$pupil.filt[baseline.index[1]: baseline.index[2]], na.rm = TRUE)
+        scale.base.line <- median(trial.sample.data$base.scaled[baseline.index[1]: baseline.index[2]], na.rm = TRUE)
         }
         
+        
+        # Baseline subtracted
+        trial.sample.data$base.change.raw <-  trial.sample.data$pupil.interpolated - base.line
+        # Percentage change
+        trial.sample.data$base.change.perc <- ((trial.sample.data$pupil.interpolated * 100)/base.line)- 100
+        # Baseline subtracted from poi z-score
+        trial.sample.data$base.scaled <-  trial.sample.data$base.scaled - scale.base.line
+      }
+      
+      ##########################################################################
+      ################## data type: filtered ###################################
+      ##########################################################################
+      
+      if (data.type == "filtered"){
+        
+        # Scale - the [, 1] is because scale() returns a matrix with its dimensions written into the header 
+        trial.sample.data$trial.scaled <- scale(trial.sample.data$pupil.filt)[, 1]
+        # Scale of poi, so actual baseline adjustment can be calculated below
+        trial.sample.data$base.scaled[baseline.index[1]: max(poi.row.index)] <- scale(
+          trial.sample.data$pupil.filt[baseline.index[1]: max(poi.row.index)])[, 1]
+        
+        
+        if(baseline.method == "mean"){
+        base.line <- mean(trial.sample.data$pupil.filt[baseline.index[1]: baseline.index[2]], na.rm = TRUE)
+        scale.base.line <- mean(trial.sample.data$base.scaled[baseline.index[1]: baseline.index[2]], na.rm = TRUE)
+        }else{
+        base.line <- median(trial.sample.data$pupil.filt[baseline.index[1]: baseline.index[2]], na.rm = TRUE)
+        scale.base.line <- median(trial.sample.data$base.scaled[baseline.index[1]: baseline.index[2]], na.rm = TRUE)
+        }
+        
+        # Baseline subtracted
         trial.sample.data$base.change.raw <-  trial.sample.data$pupil.filt - base.line
         # Percentage change
         trial.sample.data$base.change.perc <- ((trial.sample.data$pupil.filt * 100)/base.line)- 100
-        # Scale - the [, 1] is because scale() returns a matrix with its dimensions written into the header 
-        trial.sample.data$trial.scaled <- scale(trial.sample.data$pupil.filt)[, 1]
-        trial.sample.data$base.scaled[baseline.index[1]: max(poi.row.index)] <- scale(trial.sample.data$pupil.filt[baseline.index[1]: max(poi.row.index)])[, 1]
-        
+        # Baseline subtracted from poi z-score
+        trial.sample.data$base.scaled <-  trial.sample.data$base.scaled - scale.base.line
       }
       
+      ##########################################################################
+      ########################### data type: raw ###############################
+      ##########################################################################
+      
       if (data.type == "raw"){
+        
+        # Scale- the [, 1] is because scale() returns a matrix with its dimensions written into the header  
+        trial.sample.data$trial.scaled <- scale(trial.sample.data$pupil.raw)[, 1]
+        # Scale of poi, so actual baseline adjustment can be calculated below
+        trial.sample.data$base.scaled[baseline.index[1]: max(poi.row.index)] <- scale(
+          trial.sample.data$pupil.raw[baseline.index[1]: max(poi.row.index)])[, 1]
+        
+        
+        
         if(baseline.method == "mean"){
         base.line <- mean(trial.sample.data$pupil.raw[baseline.index[1]: baseline.index[2]], na.rm = TRUE)
-      }else{
+        scale.base.line <- mean(trial.sample.data$base.scaled[baseline.index[1]: baseline.index[2]], na.rm = TRUE)
+        }else{
         base.line <- median(trial.sample.data$pupil.raw[baseline.index[1]: baseline.index[2]], na.rm = TRUE)
-      }
+        scale.base.line <- median(trial.sample.data$base.scaled[baseline.index[1]: baseline.index[2]], na.rm = TRUE)
+        }
         
+        # Baseline subtracted
         trial.sample.data$base.change.raw <-  trial.sample.data$pupil.raw - base.line
         # Percentage change
         trial.sample.data$base.change.perc <- ((trial.sample.data$pupil.raw * 100)/base.line)- 100
-        # Scale- the [, 1] is because scale() returns a matrix with its dimensions written into the header  
-        trial.sample.data$trial.scaled <- scale(trial.sample.data$pupil.raw)[, 1]
-        trial.sample.data$base.scaled[baseline.index[1]: max(poi.row.index)] <- scale(trial.sample.data$pupil.raw[baseline.index[1]: max(poi.row.index)])[, 1]
-        
+        # Baseline subtracted from poi z-score
+        trial.sample.data$base.scaled <-  trial.sample.data$base.scaled - scale.base.line
         
       }
       
