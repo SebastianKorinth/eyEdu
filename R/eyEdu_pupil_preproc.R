@@ -53,7 +53,7 @@ for (participant.counter in 1:length(eyEdu.data$participants)) {
     # in the loop below
     dummy.df <- sample.data
     trial.collect <-
-      data.frame(matrix(ncol = ncol(dummy.df) + 6, nrow = 0))
+      data.frame(matrix(ncol = ncol(dummy.df) + 5, nrow = 0))
     colnames(trial.collect) <-
       c(
         colnames(dummy.df),
@@ -61,8 +61,7 @@ for (participant.counter in 1:length(eyEdu.data$participants)) {
         "pupil.diff",
         "pupil.interpolated",
         "blink.count",
-        "pupil.filt",
-        "onoffset")
+        "pupil.filt")
     rm(dummy.df)
 
 #### Trial loop ####
@@ -92,7 +91,7 @@ for (participant.counter in 1:length(eyEdu.data$participants)) {
       # Prepares empty columns for blink count and filtered data
       trial.sample.data$blink.count <- 0
       trial.sample.data$pupil.filt <- 0
-      trial.sample.data$onoffset <- 0
+
       
       # EXCEPTION 
       # trial too short
@@ -104,18 +103,12 @@ for (participant.counter in 1:length(eyEdu.data$participants)) {
 #### Moving window loop ####
       # Spikes,that is, sudden changes in pupil size are indicated if the sum
       # of values in time window (e.g., mov.win = 4) reaches threshold value 
-      # (e.g., threshold.var = 600); negative value indicates blink onset
+      # (e.g., threshold.var = 600)
       for (win.counter in 2:(nrow(trial.sample.data) - mov.win)) {
         time.window <- trial.sample.data$pupil.diff[win.counter:(win.counter + mov.win)]
-
-        # checks whether sum of values in time window lower than threshold.var indicating steep decrease
-        if (sum(time.window) < (threshold.var * -1)) {
-          trial.sample.data$onoffset[win.counter] <- -1
-          trial.sample.data$pupil.interpolated[win.counter] <- 0
-        }
-        # checks whether sum of values in time window higher than threshold.var  indicating steep increase
-        if (sum(time.window) > threshold.var) {
-          trial.sample.data$onoffset[win.counter] <- 1
+        # checks whether sum of absolute values in time window exceeds 
+        # threshold.var indicating steep decrease or increase
+        if (sum(abs(time.window)) > threshold.var ) {
           trial.sample.data$pupil.interpolated[win.counter] <- 0
         }
         } # end moving window loop
