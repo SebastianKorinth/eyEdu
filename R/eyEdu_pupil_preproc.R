@@ -12,7 +12,7 @@ EyEduPupilPreproc <- function(regression.basis = 100,
 load(file = paste(raw.data.path, "eyEdu_data.Rda", sep = ""))
   
 # Function for moving average filter
-mov.av.fu <- function(x, filt.win = filt.win.length) {stats::filter(x, rep(1 / filt.win, filt.win), sides = 1)}
+mov.av.fu <- function(x, filt.win = filt.win.length) {stats::filter(x, rep(1 / filt.win, filt.win), sides = 2)}
 
 ##### Participant loop ####
 for (participant.counter in 1:length(eyEdu.data$participants)) {
