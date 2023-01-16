@@ -49,7 +49,21 @@ EyEduPupilNoiseEstimate <- function(poi.var = "trial",
       
       if (poi.var != "trial"){
       
+      ### Exception if - for what ever reason - poi is not part of trial
+        if(length(which(trial.sample.data$poi == poi.var)) == 0){
+        trial.sample.data$noise.blink.count <- NA
+        trial.sample.data$noise.max.blink.length <- NA
+        trial.sample.data$noise.count.zeros.original <- NA
+        trial.sample.data$noise.count.zeros.remain <- NA
+        trial.sample.data$noise.count.nas <- NA
+        trial.sample.data$noise.sd <- NA
+        trial.sample.data$poi.noise <- poi.var
+        trial.collect <- rbind(trial.collect, trial.sample.data)
+        next
+      }
+      
       poi.rows.end <- max(which(trial.sample.data$poi == poi.var))
+      
       poi.rows.start <- min(which(trial.sample.data$poi == poi.var)) - baseline.var
       poi.sample.data <- trial.sample.data[poi.rows.start:poi.rows.end, ]
       row.names(poi.sample.data) <- 1:nrow(poi.sample.data)  
