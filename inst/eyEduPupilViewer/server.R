@@ -11,7 +11,7 @@ server <- function(input, output, session) {
         if(input$poi.var != "trial"){
           
           
-          ##############################
+          ############################## Prepares data for full trial
 
           # raw pupil data
           plot.pupil.raw <- eyEdu.data$participants[[
@@ -36,11 +36,25 @@ server <- function(input, output, session) {
             input$participant.name]]$sample.data$poi.time[eyEdu.data$participants[[
               input$participant.name]]$sample.data$trial.index ==  input$trial.number & eyEdu.data$participants[[input$participant.name]]$sample.data$poi == input$poi.var]
           
+          
+          # Extracts gaze position data x-axis for participant.nr and trial.nr
+          plot.gaze.x <- eyEdu.data$participants[[
+            input$participant.name]]$sample.data$Rrawx[eyEdu.data$participants[[
+              input$participant.name]]$sample.data$trial.index ==  input$trial.number & eyEdu.data$participants[[input$participant.name]]$sample.data$poi == input$poi.var]
+          
+          # Extracts gaze position data x-axis for participant.nr and trial.nr
+          plot.gaze.y <- eyEdu.data$participants[[
+            input$participant.name]]$sample.data$Rrawy[eyEdu.data$participants[[
+              input$participant.name]]$sample.data$trial.index ==  input$trial.number & eyEdu.data$participants[[input$participant.name]]$sample.data$poi == input$poi.var]
+          
+          
           # ggplot2 works only with data frames
           plot.pupil.df <- data.frame(plot.pupil.time,
                                       plot.pupil.raw,
                                       plot.pupil.intpol,
-                                      plot.pupil.filt)
+                                      plot.pupil.filt,
+                                      plot.gaze.x,
+                                      plot.gaze.y)
           
           # subsetting to chosen time scale
           end.point.sample <- as.numeric(suppressWarnings(max((which(
@@ -54,7 +68,7 @@ server <- function(input, output, session) {
          
         }else{
           
-          ##############################
+          ############################## Prepares data for poi
           
           
           # raw pupil data
@@ -80,11 +94,24 @@ server <- function(input, output, session) {
             input$participant.name]]$sample.data$trial.time[eyEdu.data$participants[[
               input$participant.name]]$sample.data$trial.index ==  input$trial.number]
           
+          
+          # Extracts gaze position data x axix for participant.nr and trial.nr
+          plot.gaze.x <- eyEdu.data$participants[[
+            input$participant.name]]$sample.data$Rrawx[eyEdu.data$participants[[
+              input$participant.name]]$sample.data$trial.index == input$trial.number]
+          
+          # Extracts gaze position data y axix for participant.nr and trial.nr
+          plot.gaze.y <- eyEdu.data$participants[[
+            input$participant.name]]$sample.data$Rrawy[eyEdu.data$participants[[
+              input$participant.name]]$sample.data$trial.index == input$trial.number]
+          
           # ggplot2 works only with data frames
           plot.pupil.df <- data.frame(plot.pupil.time,
                                       plot.pupil.raw,
                                       plot.pupil.intpol,
-                                      plot.pupil.filt)
+                                      plot.pupil.filt,
+                                      plot.gaze.x,
+                                      plot.gaze.y)
           
 
           # subsetting to chosen time scale
@@ -139,7 +166,7 @@ server <- function(input, output, session) {
 
 
 ###############################################################################
-  # renders plot
+  # renders plot 
   output$plot.image <- renderPlot({
 
     ggplot() +
@@ -180,7 +207,76 @@ server <- function(input, output, session) {
       })
 
   ###############################################################################
-  # ends the session upon botton press
+  
+  
+  ###############################################################################
+  # renders plot for scaled pupil overlayed by gaze positions
+  output$plot.z_image <- renderPlot({
+    
+    ggplot() +
+      # plot raw pupil data
+      geom_path(
+        aes(
+          x = trial.samples.fn()$plot.pupil.time,
+          y = scale(trial.samples.fn()$plot.pupil.raw)
+        ),
+        na.rm = TRUE,
+        color = "black",
+        alpha = show.raw.fn()
+      ) +
+      # plot interpolated pupil data
+      geom_path(
+        aes(
+          x = trial.samples.fn()$plot.pupil.time,
+          y = scale(trial.samples.fn()$plot.pupil.intpol)
+        ),
+        na.rm = TRUE,
+        color = "red",
+        alpha = show.intpol.fn()
+      ) +
+      # plot filtered pupil data
+      geom_path(
+        aes(
+          x = trial.samples.fn()$plot.pupil.time,
+          y = scale(trial.samples.fn()$plot.pupil.filt)
+        ),
+        na.rm = TRUE,
+        color = "blue",
+        alpha = show.filt.fn()
+      ) +
+      # plot gaze position x
+      geom_path(
+        aes(
+          x = trial.samples.fn()$plot.pupil.time,
+          y = scale(trial.samples.fn()$plot.gaze.x)
+        ),
+        na.rm = TRUE,
+        color = "darkmagenta",
+        linetype = "dotted",
+      ) +
+      # plot gaze position y
+      geom_path(
+        aes(
+          x = trial.samples.fn()$plot.pupil.time,
+          y = scale(trial.samples.fn()$plot.gaze.y)
+        ),
+        na.rm = TRUE,
+        color = "darkgreen",
+        linetype = "dotted"
+      ) +
+      annotate("text", x=10, y=-2.5, label= "gaze x-axis",
+               colour = "darkmagenta",size = 6, hjust = 0) + 
+      annotate("text", x=10, y=-2.8, label= "gaze y-axis",
+               colour = "darkgreen",size = 6, hjust = 0) + 
+      labs(x = "time in ms", y = "scaled gaze & pupil") +
+      ylim(-3, +3) +
+      theme_gray() +
+      theme(text = element_text(size = 20))
+  })
+  
+  ###############################################################################
+  
+  # ends the session upon button press
   observeEvent(input$ending, {
     session$close()
   })

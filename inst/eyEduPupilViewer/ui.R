@@ -51,8 +51,16 @@ shinyUI(fluidPage(
   
   # main panel    
   mainPanel(
-     plotOutput("plot.image",
-               width = 800 * scale.var,
-               height = 600 * scale.var))
+
+    tabsetPanel(type = "tabs",
+                tabPanel("Plot", plotOutput("plot.image", 
+                                            width = 800 * scale.var, 
+                                            height = 600 * scale.var)),
+                tabPanel("z & gaze", plotOutput("plot.z_image", 
+                                                     width = 800 * scale.var, 
+                                                     height = 600 * scale.var)))
+   
+    
+    
 )
-)
+))
