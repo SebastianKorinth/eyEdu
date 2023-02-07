@@ -67,7 +67,7 @@ empty.columns <- sapply(eye.mov.data, function(x)all(is.na(x)))
 eye.mov.data <- eye.mov.data[,-(which(empty.columns == TRUE))]
 
 if(remove.outliers == TRUE) {
-  # Recodes negative position values into NA
+  # Re-codes negative position values into NA
   eye.mov.data$Rrawx[eye.mov.data$Rrawx < 0]  <- NA
   eye.mov.data$Rrawy[eye.mov.data$Rrawy < 0] <- NA
 }
@@ -85,7 +85,7 @@ eye.mov.data$Lavgy <- eye.mov.data$Lrawy
 eye.mov.data$Lrawx <- eye.mov.data$Lrawx
 eye.mov.data$Lrawy <- eye.mov.data$Lrawy
 
-# Fixes rowname order for indexing.
+# Fixes row name order for indexing.
 row.names(eye.mov.data) <- 1: nrow(eye.mov.data)
 
 }
@@ -174,7 +174,7 @@ trial.info$background.image <- paste(participant.nr, "_",
 
 
 
-# Loop searches for rownames in eye movement data, wich correspond 
+# Loop searches for rownames in eye movement data, which correspond 
 # to time points of start and stop messages. Note, timing of eye movement data 
 # (i.e., ~ 2 ms each time point at 500Hz sampling rate) has to be aligned with 
 # stimulus and response timing (1 ms accuracy). The nearest eye movement
@@ -212,7 +212,7 @@ if (length(message.dict) >1){
   }
   }
 
-# Deletes rows that were not asigned to a trial due to differences in sample
+# Deletes rows that were not assigned to a trial due to differences in sample
 # precision (i.e., 2 ms vs. 1 ms) or because ...
 eye.mov.data <- subset(eye.mov.data, eye.mov.data$trial.index > 0)
 }
@@ -225,11 +225,29 @@ raw.data <- read.csv(paste(raw.data.path,asc.path, raw.file.list[file.counter],
 colnames(raw.data)[1] <- "temp"
 
 fixation.data <- raw.data[which(grepl("EFIX", raw.data$temp) == TRUE),]
-colnames(fixation.data)[3:7] <- c("fix.start", "fix.end", "fix.dur", "fix.pos.x", "fix.pos.y")
+
+
+if(eye.sides == "R"){
+  # subsets fixation to only include fixations from the right eye
+  fixation.data <- subset(fixation.data, fixation.data$V2 == "R")
+  colnames(fixation.data)[3:7] <- c("fix.start", "fix.end", "fix.dur", "fix.pos.x", "fix.pos.y")
+}
+
+
+if(eye.sides == "L"){
+  # subsets fixation to only include fixations from the left eye
+  fixation.data <- subset(fixation.data, fixation.data$V2 == "L")
+  colnames(fixation.data)[3:7] <- c("fix.start", "fix.end", "fix.dur", "fix.pos.x", "fix.pos.y")
+}
+
 
 fixation.data[3:ncol(fixation.data)] <- suppressWarnings(sapply(fixation.data[3:ncol(fixation.data)],as.numeric))
 fixation.data$trial.index <- 0
 fixation.data$stimulus.id <- NA
+
+
+
+
 for(trial.counter in 1:nrow(trial.info)) {
   start.row <-  which.min(
     abs(fixation.data$fix.start - trial.info$start.message[trial.counter]))
@@ -275,7 +293,7 @@ if (length(message.dict) >1){
 }
 
 
-# Initialises header information data frame
+# Initializes header information data frame
 header.info <- as.data.frame(matrix(ncol = 7 , nrow = 1))
 colnames(header.info) <- c("participant.name", 
                            "participant.nr", 
