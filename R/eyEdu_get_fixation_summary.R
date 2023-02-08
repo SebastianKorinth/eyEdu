@@ -34,7 +34,20 @@ for (participant.counter in 1:length(eyEdu.data$participants)) {
     participant.counter]]$header.info$participant.nr
   fixation.summary <- rbind(fixation.summary,fixation.data)
   
+  
+  
+  # Providing some feedback on processing progress.
+  processed.participant <- names(eyEdu.data$participants[participant.counter])
+  print(paste("Adding fixation data of:",
+              processed.participant, "to fixation summary", 
+              "- number", participant.counter, 
+              "out of", 
+              max(length(eyEdu.data$participants)), sep = " ")) 
+  
+  
 }
+
+print("Finished creating fixation summary. Saving the file might take a while.")
 save(fixation.summary, file = paste(raw.data.path, "fixation_summary.Rda",
                                     sep = ""))
 }
