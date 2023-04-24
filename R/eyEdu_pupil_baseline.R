@@ -61,7 +61,15 @@ for (trial.counter in 1:max(eyEdu.data$participants[[participant.counter]]$sampl
         next
       }
         
-      baseline.index <- c(min((poi.row.index) - baseline.width), min((poi.row.index)-1))
+      # simple baseline defined by poi start - x samples 
+      if(length(baseline.width) == 1) {
+        baseline.index <- c(min((poi.row.index) - baseline.width), min((poi.row.index)-1))
+      }
+      
+      # baseline defined by two values for samples before and after poi start
+      if(length(baseline.width) == 2) {
+        baseline.index <- c(min(poi.row.index) + baseline.width[1], min((poi.row.index)+ baseline.width[2]))
+      }
       
       ##########################################################################
       ################## data type: interpolated ###############################
