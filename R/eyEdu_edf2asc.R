@@ -1,12 +1,13 @@
 EyEduEdf2asc <- function(app.path = NA,
                          edf.path = NA,
                          asc.path = NA,
-                         add.options = NA) {
+                         add.options = NA,
+                         subFolder = TRUE) {
   
   if(!dir.exists(asc.path)){
     dir.create(asc.path)
   }
- file.list <- list.files(edf.path,pattern = ".edf", ignore.case = T)
+ file.list <- list.files(edf.path,pattern = ".edf", ignore.case = T, recursive = subFolder)
   
 
     for (file.counter in 1: length(file.list)) {
