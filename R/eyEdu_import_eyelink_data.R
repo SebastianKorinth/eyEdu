@@ -7,7 +7,8 @@ EyEduImportEyeLinkData <- function(poi.start = NA,
                               python.correction = FALSE,
                               eye.sides = "R",
                               include.samples = FALSE,
-                              msg.col.number = 2){
+                              msg.col.number = 2,
+                              stimulus.tag = NA){
 
 # List of files that will be processed.
 raw.file.list <- list.files(path= paste(raw.data.path, asc.path, sep = ""), 
@@ -143,10 +144,14 @@ trial.info$trial.index <- 1:nrow(trial.info)
 trial.info$trial.duration <- trial.info$stop.message - trial.info$start.message
 
 
-temp.message <- message.data[which(message.data[,msg.col.number] == "stimulus"), 3:ncol(message.data)]
-
-
-  trial.info$stimulus.message <- NA 
+    #temp.message <- message.data[which(message.data[,msg.col.number] == "stimulus"), 3:ncol(message.data)]
+    
+    if(is.na(stimulus.tag)){
+      trial.info$stimulus.message <- NA
+    } else {
+      trial.info$stimulus.message <- message.data[which(message.data[,msg.col.number] == stimulus.tag), 4]
+    }
+    
 
 trial.info$stimulus.id <- trial.info$trial.index
 
