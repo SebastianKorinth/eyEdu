@@ -6,7 +6,8 @@ EyEduImportEyeLinkData <- function(poi.start = NA,
                               remove.outliers = TRUE,
                               python.correction = FALSE,
                               eye.sides = "R",
-                              include.samples = FALSE){
+                              include.samples = FALSE,
+                              msg.col.number = 2){
 
 # List of files that will be processed.
 raw.file.list <- list.files(path= paste(raw.data.path, asc.path, sep = ""), 
@@ -119,22 +120,22 @@ if(is.na(poi.start)){
 # Extracts info about time points for trial start, trial end (or period of 
 # interest) and writes these to a new data frame: trial.info
 number.of.trials <- length(message.data$time[which(
-  message.data$message.1 == poi.start)])
+  message.data[,msg.col.number] == poi.start)])
 
 trial.info <- as.data.frame(matrix(ncol = poi.count, nrow = number.of.trials))
 colnames(trial.info) <-  message.couple
 
 trial.info$start.message <- as.numeric(message.data$time[which(
-  message.data$message.1 == poi.start)])
+  message.data[,msg.col.number] == poi.start)])
 
 trial.info$stop.message <- as.numeric(message.data$time[which(
-  message.data$message.1 == poi.end)])
+  message.data[,msg.col.number] == poi.end)])
 
 
 if(ncol(trial.info) > 3){
 for(col.index in 3:ncol(trial.info)){
   trial.info[col.index] <- as.numeric(message.data$time[which(
-    message.data$message.1 == colnames(trial.info)[col.index])])
+    message.data[,msg.col.number] == colnames(trial.info)[col.index])])
 }
 }
 
@@ -142,19 +143,10 @@ trial.info$trial.index <- 1:nrow(trial.info)
 trial.info$trial.duration <- trial.info$stop.message - trial.info$start.message
 
 
-temp.message <- message.data[which(message.data$message.1 == "stimulus"), 3:ncol(message.data)]
+temp.message <- message.data[which(message.data[,msg.col.number] == "stimulus"), 3:ncol(message.data)]
 
-# if(nrow(temp.message) < 1){
+
   trial.info$stimulus.message <- NA 
-# } else {
-#   empty.columns <- sapply(temp.message, function(x)all(is.na(x)))
-#   temp.message <- temp.message[,-(which(empty.columns == TRUE))]
-#   trial.info$stimulus.message <- apply(temp.message[ , 1:ncol(temp.message) ] , 1 , paste , collapse = " " )
-#   trial.info$stimulus.message <-trimws(trial.info$stimulus.message,which = "right")  
-# }
-
-# trial.info$stimulus.id <- as.numeric(message.data$message.2[which(
-#   message.data$message.1 == poi.start)])
 
 trial.info$stimulus.id <- trial.info$trial.index
 
