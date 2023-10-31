@@ -148,12 +148,13 @@ trial.info$trial.duration <- trial.info$stop.message - trial.info$start.message
     
     if(is.na(stimulus.tag)){
       trial.info$stimulus.message <- NA
+      trial.info$stimulus.id <- trial.info$trial.index
     } else {
       trial.info$stimulus.message <- message.data[which(message.data[,msg.col.number] == stimulus.tag), 4]
+      trial.info$stimulus.id <- trial.info$stimulus.message
     }
-    
 
-trial.info$stimulus.id <- trial.info$trial.index
+
 
 if(is.na(participant.id.var)){
   participant.nr <- gsub(".asc", "", raw.file.list[file.counter], ignore.case = T)
