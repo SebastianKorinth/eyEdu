@@ -5,7 +5,8 @@ EyEduPupilPreproc <- function(regression.basis = 100,
                               mov.win = 4,
                               threshold.var = 600,
                               left.eye = FALSE,
-                              span.var = 0.5) {
+                              span.var = 0.5,
+                              fix.gaze = FALSE) {
 
 
   # Loads eyEdu_data  
@@ -338,6 +339,14 @@ for (participant.counter in 1:length(eyEdu.data$participants)) {
     eyEdu.data[["participants"]][[participant.counter]][["sample.data"]]$pupil.filt <-
       trial.collect$pupil.filt
     
+    # Removes blink onset and offset from raw gaze positions
+    if(fix.gaze == TRUE){
+      trial.collect$rawx[which(trial.collect$blink.count > 0)] <- NA
+      trial.collect$rawy[which(trial.collect$blink.count > 0)] <- NA
+      
+      eyEdu.data[["participants"]][[participant.counter]][["sample.data"]]$rawx <- trial.collect$rawx
+      eyEdu.data[["participants"]][[participant.counter]][["sample.data"]]$rawy <- trial.collect$rawy
+    }
     
     # Provides some feedback on processing progress.
     processed.participant <-
