@@ -18,7 +18,13 @@ EyEduEdf2asc <- function(app.path = NA,
                                   "-p",
                                   asc.path, 
                                   sep = " ")
+                                  
+      if(Sys.info()["sysname"] == "Windows"){
+      system2("cmd.exe", input =  conversion.command)}
+      else{
       system(conversion.command)
+      }                            
+      
     }
     
 
