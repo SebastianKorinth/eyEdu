@@ -303,6 +303,19 @@ for (participant.counter in 1:length(eyEdu.data$participants)) {
           next
         }
       
+      	  # EXCEPTION
+        # checks whether a meaningful loess model can be computed
+        w.e.status <- tryCatch(loess(blink.patched$pupil ~ blink.patched$time, span = span.var),
+                        error=function(e) e, 
+                        warning=function(w) w)
+      
+        
+        if (is(w.e.status, "error") | is(w.e.status, "warning")){
+          trial.sample.data$pupil.interpolated[which(trial.sample.data$blink.count == blink.index)] <-
+            trial.sample.data$pupil.interpolated[which(trial.sample.data$blink.count == blink.index)]
+          next
+        }
+        
         # Estimates a loess model 
         loess.results <- loess(blink.patched$pupil ~ blink.patched$time, span = span.var)
         
