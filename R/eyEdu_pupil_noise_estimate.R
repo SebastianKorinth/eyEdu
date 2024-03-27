@@ -1,5 +1,7 @@
-EyEduPupilNoiseEstimate <- function(poi.var = "trial",
-                                    baseline.var = 0) {
+EyEduPupilNoiseEstimate <- function(poi.var = "results",
+                                    baseline.var = 0,
+                                    crop.var = NA) {
+  
   
   
   # Loads eyEdu_data    
@@ -10,7 +12,7 @@ EyEduPupilNoiseEstimate <- function(poi.var = "trial",
     
     # Creates an empty data frame
     dummy.df <- eyEdu.data[["participants"]][[participant.counter]][["sample.data"]]
-    trial.collect <- data.frame(matrix(ncol = ncol(dummy.df)+ 6, nrow = 0))
+    trial.collect <- data.frame(matrix(ncol = ncol(dummy.df) + 6, nrow = 0))
     colnames(trial.collect) <- c(colnames(dummy.df), 
                                  "noise.blink.count", 
                                  "noise.max.blink.length", 
@@ -28,7 +30,7 @@ EyEduPupilNoiseEstimate <- function(poi.var = "trial",
       # Exception
       # trial too short
       
-      if(nrow(trial.sample.data) < 10){
+      if (nrow(trial.sample.data) < 10) {
         trial.sample.data$noise.blink.count <- NA
         trial.sample.data$noise.max.blink.length <- NA
         trial.sample.data$noise.count.zeros.original <- NA
@@ -47,10 +49,10 @@ EyEduPupilNoiseEstimate <- function(poi.var = "trial",
       ##########################################################################  
       
       
-      if (poi.var != "trial"){
+      if (poi.var != "trial") {
       
       ### Exception if - for what ever reason - poi is not part of trial
-        if(length(which(trial.sample.data$poi == poi.var)) == 0){
+        if (length(which(trial.sample.data$poi == poi.var)) == 0) {
         trial.sample.data$noise.blink.count <- NA
         trial.sample.data$noise.max.blink.length <- NA
         trial.sample.data$noise.count.zeros.original <- NA
@@ -62,9 +64,18 @@ EyEduPupilNoiseEstimate <- function(poi.var = "trial",
         next
       }
       
-      poi.rows.end <- max(which(trial.sample.data$poi == poi.var))
-      
+      # get row index of poi start and extent or crop baseline time points 
       poi.rows.start <- min(which(trial.sample.data$poi == poi.var)) - baseline.var
+      
+      # if needed crop poii
+      if (is.na(crop.var) == FALSE) {
+         poi.rows.end <- poi.rows.start + crop.var
+      }else{
+        poi.rows.end <- max(which(trial.sample.data$poi == poi.var))
+       }
+          
+      
+      
       poi.sample.data <- trial.sample.data[poi.rows.start:poi.rows.end, ]
       row.names(poi.sample.data) <- 1:nrow(poi.sample.data)  
       
@@ -77,7 +88,7 @@ EyEduPupilNoiseEstimate <- function(poi.var = "trial",
       # number of nas possibly created during preprocessing (e.g., two blinks too close)
       trial.sample.data$noise.count.nas <- length(which(is.na(poi.sample.data$pupil.interpolated)))
       
-      
+      # standard deviation 
       trial.sample.data$noise.sd  <- sd(poi.sample.data$pupil.interpolated,na.rm = TRUE)
       
       # run length encoding to get the number of blinks and their lengths in the poi
