@@ -98,7 +98,7 @@ raw.data <- read.csv(paste(raw.data.path,asc.path, raw.file.list[file.counter],
                      strip.white=T, stringsAsFactors=FALSE)
 colnames(raw.data)[1] <- "time"
 
-message.data <- raw.data[which(grepl(^"MSG", raw.data$time,useBytes = TRUE) == TRUE),]
+message.data <- raw.data[which(grepl("^MSG", raw.data$time,useBytes = TRUE) == TRUE),]
 message.data$time <- gsub("MSG", "", message.data$time)
 message.data$time <- as.numeric(message.data$time)
 colnames(message.data)[2:ncol(message.data)] <- paste("message.", 1:(ncol(message.data)-1), sep = "")
