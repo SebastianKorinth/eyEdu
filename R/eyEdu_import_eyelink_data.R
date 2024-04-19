@@ -222,7 +222,7 @@ raw.data <- read.csv(paste(raw.data.path,asc.path, raw.file.list[file.counter],
                      strip.white=T, stringsAsFactors=FALSE)
 colnames(raw.data)[1] <- "temp"
 
-fixation.data <- raw.data[which(grepl("EFIX", raw.data$temp) == TRUE),]
+fixation.data <- raw.data[which(grepl("^EFIX", raw.data$temp,useBytes = TRUE) == TRUE),]
 
 
 if(eye.sides == "R"){
