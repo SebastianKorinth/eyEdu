@@ -60,7 +60,15 @@ for (participant.counter in 1:length(eyEdu.data$participants)) {
   }
   
   else{
-    sample.summary <- rbind(sample.summary,sample.df)
+    
+    
+    if (ncol(sample.df) != ncol(sample.summary)) {
+      print(paste0("mismatch column number for ", sample.df$participant.name[1]))
+      next
+    } else {
+      sample.summary <- rbind(sample.summary,sample.df)
+    }
+    
   }
   # Providing some feedback on processing progress.
   processed.participant <- names(eyEdu.data$participants[participant.counter])
