@@ -35,19 +35,27 @@ for (participant.counter in 1:length(eyEdu.data$participants)) {
       sample.data$pupil.filt <- NULL
     }
     
+
+    
     # Check, whether noise estimation has been conducted already, 
     # remove if exists
-    if ("poi.blink.count" %in% colnames(sample.data)) {
-      sample.data$poi.blink.count <- NULL
+    if ("noise.blink.count" %in% colnames(sample.data)) {
+      eyEdu.data[["participants"]][[participant.counter]][["sample.data"]]$noise.blink.count <- NULL
     }
-    if ("poi.max.blink.length" %in% colnames(sample.data)) {
-      sample.data$poi.max.blink.length <- NULL
+    if ("noise.max.blink.length" %in% colnames(sample.data)) {
+      eyEdu.data[["participants"]][[participant.counter]][["sample.data"]]$noise.max.blink.length <- NULL
     }
-    if ("poi.noise" %in% colnames(sample.data)) {
-      sample.data$poi.noise <- NULL
+    if ("noise.count.zeros.original" %in% colnames(sample.data)) {
+      eyEdu.data[["participants"]][[participant.counter]][["sample.data"]]$noise.count.zeros.original <- NULL
     }
-    if ("poi.sum.zeros" %in% colnames(sample.data)) {
-      sample.data$poi.sum.zeros <- NULL
+    if ("noise.count.zeros.remain" %in% colnames(sample.data)) {
+      eyEdu.data[["participants"]][[participant.counter]][["sample.data"]]$noise.count.zeros.remain <- NULL
+    }
+    if ("noise.count.nas" %in% colnames(sample.data)) {
+      eyEdu.data[["participants"]][[participant.counter]][["sample.data"]]$noise.count.nas <- NULL
+    }
+    if ("noise.sd" %in% colnames(sample.data)) {
+      eyEdu.data[["participants"]][[participant.counter]][["sample.data"]]$noise.sd <- NULL
     }
     
     # Creates an empty data frame that will collect the data of each trials
@@ -154,21 +162,26 @@ for (participant.counter in 1:length(eyEdu.data$participants)) {
         next
       }
       
-      # Exception 
-      # trial starts with blink so no onset for first blink 
+      # Exception
+      # trial starts with blink so no onset for first blink
       # removes the offset for this first blink from blink vector
       if(blink.onsets[1] > blink.offsets[1]){
         blink.offsets <- blink.offsets[-1]
       }
-      
+       
+
       # Exception 
-      # trial starts with blink onset too close to trial onset, 
-      # so no data points for regression removes this blink from blink vectors 
+      # trial starts with blink onset(s) too close to trial onset, 
+      # so no data points for regression removes this blink(s) from blink vectors 
       # (i.e.,both on- and offset)
-      if(blink.onsets[1] - regression.basis <= 0){
-        blink.onsets <- blink.onsets[-1]
-        blink.offsets <- blink.offsets[-1]
+      if (length(which((blink.onsets - regression.basis) < 0)) > 0) {
+        problem.onsets <- which((blink.onsets - regression.basis) < 0)
+        blink.onsets <- blink.onsets[-problem.onsets]
+        blink.offsets <- blink.offsets[-problem.onsets]
+        
       }
+      
+      
       
       # Exception 
       # if trial contains only one blink to close to trial onset, which is removed above
@@ -184,25 +197,7 @@ for (participant.counter in 1:length(eyEdu.data$participants)) {
         next
       }
       
-      # Exception
-      # happened that even the second blink is too close to the trial onset
-      if(blink.onsets[1] - regression.basis <= 0){
-        blink.onsets <- blink.onsets[-1]
-        blink.offsets <- blink.offsets[-1]
-      }
-      
-      # Exception
-      # happend that even the third blink is too close to the trial onset
-      if(blink.onsets[1] - regression.basis <= 0){
-        blink.onsets <- blink.onsets[-1]
-        blink.offsets <- blink.offsets[-1]
-      }
-      # Exception
-      # happend that even the fourth blink is too close to the trial onset
-      if(blink.onsets[1] - regression.basis <= 0){
-        blink.onsets <- blink.onsets[-1]
-        blink.offsets <- blink.offsets[-1]
-      }
+    
       # Exception 
       # trial ends with blink so no offset for last blink 
       # defines last row of trial.sample.data as offset
