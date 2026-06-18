@@ -168,14 +168,32 @@ server <- function(input, output, session) {
 # renders plot
   output$plot.image <- renderPlot({ 
       ggplot() +
-        scale_y_reverse(lim = c(page.height, 0), breaks = NULL) + 
-        scale_x_continuous(lim = c(0, page.width), breaks = NULL) + 
-        annotation_custom(rasterGrob(readPNG(trial.image.fn()), interpolate = T),
-                          xmin = 0,
-                          xmax = page.width,
-                          ymin = 0,
-                          ymax = -1 * page.height) +
-        geom_path(aes(trial.samples.fn()$rawx,trial.samples.fn()$rawy), 
+        # scale_y_reverse(lim = c(page.height, 0), breaks = NULL) + 
+        # scale_x_continuous(lim = c(0, page.width), breaks = NULL) + 
+        # annotation_custom(rasterGrob(readPNG(trial.image.fn()), interpolate = T),
+        #                   xmin = 0,
+        #                   xmax = page.width,
+        #                   ymin = 0,
+        #                   ymax = -1 * page.height) +
+
+      scale_y_reverse(lim = c(page.height, 0), breaks = NULL) +
+      scale_x_continuous(lim = c(0, page.width), breaks = NULL) +
+      annotation_custom(
+        rasterGrob(readPNG(trial.image.fn()), interpolate = TRUE),
+        xmin = 0,
+        xmax = page.width,
+        ymin = 0,
+        ymax = page.height
+      ) +
+      # might annotation_raster might not work for all ggplot versions?
+      # annotation_raster(
+      #   readPNG(trial.image.fn()),
+      #   xmin = 0,
+      #   xmax = page.width,
+      #   ymin = 0,
+      #   ymax = page.height
+      # ) +
+      geom_path(aes(trial.samples.fn()$rawx,trial.samples.fn()$rawy), 
                   colour = "blue", alpha = show.raw.fn(), na.rm=TRUE) + 
         geom_path(aes(trial.samples.fn()$x.filt,trial.samples.fn()$y.filt), 
                 colour = "red", alpha = show.filt.fn(), na.rm=TRUE) +
